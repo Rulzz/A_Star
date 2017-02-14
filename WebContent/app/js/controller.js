@@ -10,17 +10,26 @@
     	*/
     	
     	
+    	$scope.change = function() {
+    			$scope.xy='Random';
+    	}
     	
-    	getDefaultGrid();
-
-        function getDefaultGrid() {
-        	GridLayoutService.getDefaultGrid() .then(function (response) {
-		                    $scope.grid = response.data;
-		                }, function (error) {
-		                	console.log('Unable to load default data: ' + error.message);
-		                });
+    	$scope.getDefaultGrid = function() {
+    		
+        						GridLayoutService.getDefaultGrid() .then(function (response) {
+				                    $scope.grid = response.data;
+				                }, function (error) {
+				                	console.log('Unable to load default data: ' + error.message);
+				                });	
         }
+    	$scope.getCustomizedGrid = function() {
+    							var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+    							GridLayoutService.getCustomizedGrid(customizedParam) .then(function (response) {
+					                $scope.grid = response.data;
+					            }, function (error) {
+					            	console.log('Unable to load default data: ' + error.message);
+					            });	
+    	}
     	
     }])
- 
 }());

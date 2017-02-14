@@ -1,23 +1,40 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<script src="../externaljs/angular.min.js"></script>
 	<script src="../externaljs/jquery-3.1.1.min.js"></script>
 	<script src="../externaljs/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="../css/bootstrap.min.css"/>
 	<script src="../js/app.js"></script>
 	<script src="../js/service.js"></script>
 	<script src="../js/controller.js"></script>
 </head>
 	<body ng-app="myApp">
-		<div class="container">
-			<nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom affix-top">
-        		<div class="container">
-        			<button type="button" class="btn btn-info btn-lg">Default</button>
-        		</div>
-		    </nav>
-			
-			<div class="row" class="col-sm-12" ng-controller="GridLayoutCtrl" >
-					<table class="col-sm-12 col-md-12 col-lg-12" class="table">
+		<div ng-controller="GridLayoutCtrl">
+			<div class="container-fluid">
+				</br></br>
+        		<div class="row"> <div class="col-md-4" ><b>To create a random maze, click here : </b><button type="button" class="btn btn-primary" class="col-md-4" ng-click="getDefaultGrid()">Random</button></div></div>
+        		</br>
+        		<form class="form-group" name='form' ng-submit="getCustomizedGrid()">
+        			<div class="row"><div class="col-md-4" ><b>To customize a maze, enter maze parameters here : </b></div></div>
+        			<div class="row">
+				   	<div class="col-md-2">Enter Length of grid : <input type="number" name="length" ng-model="length" required ng-trim="false"></div>
+				   	<div class="col-md-2">Enter Breadth of grid : <input type="number" name="breadth" ng-model="breadth" required ng-trim="false"></div>
+		            <div class="col-md-2">Enter x coordinate of start point: <input type="number" name="xStart" ng-model="xStart" required ng-trim="false"></div>
+		            <div class="col-md-2">Enter y coordinate of start point: <input type="number" name="yStart" ng-model="yStart" required ng-trim="false"></div>
+		            <div class="col-md-2">Enter x coordinate of goal point: <input type="number" name="xGoal" ng-model="xGoal" required ng-trim="false"></div>
+		            <div class="col-md-2">Enter y coordinate of goal point: <input type="number" name="yGoal" ng-model="yGoal" required ng-trim="false"></div>
+		            </div>
+		            </br>
+				   	<div class="row"><div class="col-md-4"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" type="submit">Generate</button></div></div>
+				   	
+				</form>
+	       </div>
+	       </br></br>
+	       
+	       
+	       <div class="container-fluid">
+					<table class="table">
 						<tbody>
 					      <tr ng-repeat="row in grid.maze">
 					         <td ng-repeat="cell in row" ng-init="checked=true">
@@ -40,6 +57,7 @@
 				      	</tbody>
 			    	</table>
 			</div>
+	       
 		</div>
 	</body>
 </html>
