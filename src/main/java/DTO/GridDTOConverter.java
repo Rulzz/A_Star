@@ -20,4 +20,19 @@ public class GridDTOConverter {
 		gridDTO.setGoalReached(grid.isGoalReached());
 		return gridDTO;
 	}
+	
+public Grid convert (GridDTO gridDTO) {
+		
+		CellDTO[][] mazeDTO = gridDTO.getMaze();
+		Cell[][] maze = new Cell[mazeDTO.length][mazeDTO[1].length];
+		for(int i=0; i<mazeDTO.length; i++) {
+	        for(int j=0; j<mazeDTO[i].length; j++) {
+	        	maze[i][j] = cellDTOConverter.convert(mazeDTO[i][j]);
+	        }
+	    }
+		
+		Grid grid = new Grid();
+		grid.setMaze(maze);
+		return grid;
+	}
 }

@@ -13,10 +13,10 @@
 		<div ng-controller="GridLayoutCtrl">
 			<div class="container-fluid">
 				</br></br>
-        		<div class="row"> <div class="col-md-4" ><b>To create a random maze, click here : </b><button type="button" class="btn btn-primary" class="col-md-4" ng-click="getDefaultGrid()">Random</button></div></div>
+        		<div class="row"> <div class="col-md-4" ><b>Random maze creator </b><button type="button" class="btn btn-primary" class="col-md-4" ng-click="getRandomGrid()">Random</button></div></div>
         		</br>
-        		<form class="form-group" name='form' ng-submit="getCustomizedGrid()">
-        			<div class="row"><div class="col-md-4" ><b>To customize a maze, enter maze parameters here : </b></div></div>
+        		<form class="form-group" name='form'>
+        			<div class="row"><div class="col-md-4" ><b>Enter parameters --> solve for random blocks</b></div></div>
         			<div class="row">
 				   	<div class="col-md-2">Enter Length of grid : <input type="number" name="length" ng-model="length" required ng-trim="false"></div>
 				   	<div class="col-md-2">Enter Breadth of grid : <input type="number" name="breadth" ng-model="breadth" required ng-trim="false"></div>
@@ -26,9 +26,12 @@
 		            <div class="col-md-2">Enter y coordinate of goal point: <input type="number" name="yGoal" ng-model="yGoal" required ng-trim="false"></div>
 		            </div>
 		            </br>
-				   	<div class="row"><div class="col-md-4"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" type="submit">Generate</button></div></div>
-				   	
-				</form>
+		            <div class="row">
+		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getCustomizedGrid()">Solve for Random Obstacles</button></div>
+				   		<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getBasicGrid()">Generate to select Obstacles</button></div>
+				   		<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveCreatedMaze()">Solve</button></div>
+				   	</div>
+				
 	       </div>
 	       </br></br>
 	       
@@ -37,13 +40,14 @@
 					<table class="table">
 						<tbody>
 					      <tr ng-repeat="row in grid.maze">
-					         <td ng-repeat="cell in row" ng-init="checked=true">
-					         	<div class="content" ng-switch on="cell.cellStatus">
-								    <div ng-switch-when="Start"> <img src="../images/start.png" alt="HTML5 Icon" width="128" height="128"> </div>
+					         <td ng-repeat="cell in row">
+					         <div class="content" ng-switch on="cell.cellStatus">
+					         Steps till now : {{cell.stepsTillNow}}
+					         		 <div ng-switch-when="Start"> <img src="../images/start.png" alt="HTML5 Icon" width="128" height="128"> </div>
 								    <div ng-switch-when="Goal">  <img src="../images/goal.png" alt="HTML5 Icon" width="128" height="128"> </div>
-								    <div ng-switch-when="Block"> <img src="../images/block.png" alt="HTML5 Icon" width="128" height="128"> </div>
+								    <div ng-switch-when="Block" ng-click = "change(cell)"> <img src="../images/block.png" alt="HTML5 Icon" width="128" height="128"> </div>
 								    <div ng-switch-when="Visited"> <img src="../images/dot.png" alt="HTML5 Icon" width="128" height="128"> </div>
-								    <div ng-switch-when="FinalPath">
+								    <div ng-switch-when="FinalPath" ng-attr-id="{{xCoordinate}} , {{yCoordinate}}">
 								    	<div class="content" ng-switch on="cell.direction">
 										    <div ng-switch-when="Right"> <img src="../images/right.png" alt="HTML5 Icon" width="128" height="128"> </div>
 										    <div ng-switch-when="Left">  <img src="../images/left.png" alt="HTML5 Icon" width="128" height="128"> </div>
@@ -51,7 +55,7 @@
 										    <div ng-switch-when="Down"> <img src="../images/down.png" alt="HTML5 Icon" width="128" height="128"> </div>
 										</div> 
 									</div>
-									<div ng-switch-when="Blank"> <img src="../images/blank.png" alt="HTML5 Icon" width="128" height="128"> </div>
+									<div ng-switch-when="Blank"  ng-click = "change(cell)"> <img src="../images/blank.png" alt="HTML5 Icon" width="128" height="128"> </div>
 					          	</td>
 					      	</tr>
 				      	</tbody>

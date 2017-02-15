@@ -10,7 +10,20 @@ public class CellDTOConverter {
 		cellDTO.setyCoordinate(cell.getyCoordinate());
 		cellDTO.setCellStatus(setCellStatus(cell));
 		cellDTO.setDirection(getDirection(cell,parent));
+		cellDTO.setSteps(cell.getSteps());
+		cellDTO.setStepsTillNow(cell.getStepsTillNow());
 		return cellDTO;
+	}
+	
+	public Cell convert (CellDTO cellDTO) { 
+		Cell cell = new Cell();
+		cell.setHeuristic(cellDTO.getHeuristic());
+		cell.setxCoordinate(cellDTO.getxCoordinate());
+		cell.setyCoordinate(cellDTO.getyCoordinate());
+		cell.setEnd(cellDTO.getCellStatus().equals(CellDTO.Status.Goal.name()));
+		cell.setObstacle(cellDTO.getCellStatus().equals(CellDTO.Status.Block.name()));
+		cell.setStart(cellDTO.getCellStatus().equals(CellDTO.Status.Start.name()));
+		return cell;
 	}
 
 	private String getDirection(Cell cell, Cell parent) {

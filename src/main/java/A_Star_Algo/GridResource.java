@@ -41,7 +41,6 @@ public class GridResource {
 	
 	@POST
 	@Path("/customized") 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON) 
 	public Response solveCustomizedGrid(String param) throws JsonGenerationException, JsonMappingException, IOException { 
 		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
@@ -50,6 +49,41 @@ public class GridResource {
 		String jsonInString = mapper.writeValueAsString(gridDTO);
 		return Response.status(200).header("Access-Control-Allow-Origin", "*")
 	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();
+	}
+	
+	@POST 
+	@Path("/basic") 
+	@Produces(MediaType.APPLICATION_JSON) 
+	public Response getBasicGrid(String param) throws JsonGenerationException, JsonMappingException, IOException{ 
+		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
+		Grid grid = service.getBlankGrid(gridParam);
+		GridDTO gridDTO = gridDTOConverter.convert(grid);
+		String jsonInString = mapper.writeValueAsString(gridDTO);
+		
+		return Response.status(200).header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();
+	}
+	
+	@POST 
+	@Path("/solveCreatedMaze") 
+	@Produces(MediaType.APPLICATION_JSON) 
+	public Response solveCreatedMaze(String paramAndGrid) throws JsonGenerationException, JsonMappingException, IOException{
+		String paramString = paramAndGrid.split("\\|")[0];
+		String gridString = paramAndGrid.split("\\|")[1];
+		GridParameters gridParam = mapper.readValue(paramString, GridParameters.class);
+		GridDTO gridDTOinput = mapper.readValue(gridString, GridDTO.class);
+		Grid grid = service.solveCreatedMaze(gridDTOConverter.convert(gridDTOinput), gridParam);
+		GridDTO gridDTO = gridDTOConverter.convert(grid);
+		String jsonInString = mapper.writeValueAsString(gridDTO);
+		
+		return Response.status(200).header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
 	            .header("Access-Control-Allow-Credentials", "true")
 	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();

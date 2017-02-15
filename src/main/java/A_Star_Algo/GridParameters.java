@@ -1,12 +1,12 @@
 package A_Star_Algo;
 
 public class GridParameters {
-	private int length;
-	private int breadth;
-	private int xStart;
-	private int yStart;
-	private int xGoal;
-	private int yGoal;
+	public int length;
+	public int breadth;
+	public int xStart;
+	public int yStart;
+	public int xGoal;
+	public int yGoal;
 	public int getLength() {
 		return length;
 	}

@@ -8,31 +8,10 @@ package A_Star_Algo;
 public class MazeCreator 
 {
 
-	private Grid grid = new Grid();
 	public Grid createMaze(GridParameters param) 
 	{
 		
-		Cell[][] maze = new Cell[param.getLength()][param.getBreadth()];
-		for(int x=0 ; x<param.getLength(); x++) {
-			for(int y=0 ; y<param.getBreadth(); y++) {
-				Cell xy = new Cell();
-				xy.setxCoordinate(x);
-				xy.setyCoordinate(y);
-				
-				if(x==param.getxStart() && y==param.getyStart()) {
-					xy.setStart(true);
-				}
-				if(x==param.getxGoal() && y==param.getyGoal()) {
-					xy.setEnd(true);
-				}
-				
-				xy.setHeuristic(Math.abs(param.getxGoal()-x)+Math.abs(param.getyGoal()-y));
-				
-				maze[x][y] = xy;
-			}
-		}
-		
-		grid.setMaze(maze);
+		Grid grid = createBasicMaze(param);
 		
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
@@ -43,6 +22,12 @@ public class MazeCreator
 		
 		generateBlocks(0,0, grid.getMaze()[0][0], param);
 		
+		populateChildren(grid, param);
+		
+		
+		return grid;
+	}
+	public void populateChildren(Grid grid, GridParameters param) {
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
 				grid.getMaze()[x][y].setChildren(grid, param);
@@ -50,7 +35,6 @@ public class MazeCreator
 			}
 		}
 		
-		return grid;
 	}
 	private void generateBlocks(int row, int column, Cell node, GridParameters param) {
 		
@@ -63,6 +47,30 @@ public class MazeCreator
 				generateBlocks(child.getxCoordinate(), child.getyCoordinate(), child, param);
 			}
 		}
+	}
+	public Grid createBasicMaze(GridParameters gridParam) {
+		Cell[][] maze = new Cell[gridParam.getLength()][gridParam.getBreadth()];
+		for(int x=0 ; x<gridParam.getLength(); x++) {
+			for(int y=0 ; y<gridParam.getBreadth(); y++) {
+				Cell xy = new Cell();
+				xy.setxCoordinate(x);
+				xy.setyCoordinate(y);
+				
+				if(x==gridParam.getxStart() && y==gridParam.getyStart()) {
+					xy.setStart(true);
+				}
+				if(x==gridParam.getxGoal() && y==gridParam.getyGoal()) {
+					xy.setEnd(true);
+				}
+				
+				xy.setHeuristic(Math.abs(gridParam.getxGoal()-x)+Math.abs(gridParam.getyGoal()-y));
+				
+				maze[x][y] = xy;
+			}
+		}
+		Grid grid = new Grid();
+		grid.setMaze(maze);
+		return grid;
 	}
 	
 }

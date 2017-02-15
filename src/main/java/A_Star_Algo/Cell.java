@@ -13,6 +13,7 @@ public class Cell {
 	private boolean onFinalPath;
 	private int heuristic;
 	private int steps;
+	private int stepsTillNow;
 	private Cell parent;
 	private ArrayList<Cell> children;
 	
@@ -148,6 +149,14 @@ public class Cell {
 	}
 	
 	
+	public int getStepsTillNow() {
+		return stepsTillNow;
+	}
+
+	public void setStepsTillNow(int stepsTillNow) {
+		this.stepsTillNow = stepsTillNow;
+	}
+
 	public boolean equals(Cell cell) {
 	    return (this.getxCoordinate()== cell.getxCoordinate() && this.getyCoordinate()== cell.getyCoordinate());
 	}

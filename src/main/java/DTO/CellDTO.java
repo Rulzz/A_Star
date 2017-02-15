@@ -7,6 +7,7 @@ public class CellDTO {
 	private int heuristic;
 	private String cellStatus;
 	private int steps;
+	private int stepsTillNow;
 	private String direction;
 	public int getxCoordinate() {
 		return xCoordinate;
@@ -46,6 +47,15 @@ public class CellDTO {
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
+	
+
+	public int getStepsTillNow() {
+		return stepsTillNow;
+	}
+	public void setStepsTillNow(int stepsTillNow) {
+		this.stepsTillNow = stepsTillNow;
+	}
+
 
 	public enum Status {
 		Start, Goal, Block, Visited, FinalPath, Blank

@@ -17,6 +17,7 @@ public class ExecuteAStar {
 		Map<Integer, ArrayList<Cell>> estimateMap = new HashMap<>(); 
 		ArrayList<Cell> rootList = new ArrayList<>();
 		rootList.add(start);
+		start.setVisited(true);
 		estimateMap.put(start.getHeuristic(), rootList);
 		isReached = tracePath(estimateMap, goal);
 		
@@ -39,10 +40,12 @@ public class ExecuteAStar {
 
 	private static boolean tracePath(Map<Integer, ArrayList<Cell>> estimateMap, Cell goal) {
 		Boolean isReached = false;
+		Integer stepsTillNow = 1;
 		while(!(emptyValues(estimateMap.values()) || isReached)) {
 			
 			int leastEstimate = getLeastEstimate(estimateMap.keySet());
-			Cell currentNode = estimateMap.get(leastEstimate).get(0);
+			Cell currentNode =getCellWithLessHeuristic(estimateMap.get(leastEstimate));
+			
 			currentNode.setVisited(true);
 			Cell bestChild = getBestChild(currentNode);
 			if(bestChild==null) {
@@ -59,15 +62,28 @@ public class ExecuteAStar {
 					break;
 				}
 				
-				bestChild.setSteps(bestChild.getParent().getSteps());
+				bestChild.setSteps(bestChild.getParent().getSteps()+1);
 				
 				System.out.println("Expanded : " + bestChild.getxCoordinate() + "," + bestChild.getyCoordinate()); 
 				bestChild.setVisited(true);
+				bestChild.setStepsTillNow(stepsTillNow);
 				addRemoveEstimates(estimateMap, bestChild);
 			}
-			
+			stepsTillNow = stepsTillNow+1;
 		}
 		return isReached;
+	}
+
+	private static Cell getCellWithLessHeuristic(ArrayList<Cell> equallyProbable) {
+		Integer leastH = Integer.MAX_VALUE;
+		Cell leastHeu = new Cell();
+		for(Cell cell : equallyProbable) {
+			if(cell.getHeuristic()<leastH) {
+				leastH = cell.getHeuristic();
+				leastHeu=cell;
+			}
+		}
+		return leastHeu;
 	}
 
 	private static boolean emptyValues(Collection<ArrayList<Cell>> values) {

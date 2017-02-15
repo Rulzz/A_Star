@@ -32,4 +32,15 @@ public class GridService {
 		ExecuteAStar.execute(grid, param);
 		return grid;
 	}
+
+	public Grid getBlankGrid(GridParameters blankGridParam) {
+		Grid grid = mazeCreator.createBasicMaze(blankGridParam);
+		return grid;
+	}
+
+	public Grid solveCreatedMaze(Grid grid, GridParameters gridParam) {
+		mazeCreator.populateChildren(grid, gridParam);
+		ExecuteAStar.execute(grid, gridParam);
+		return grid;
+	}
 }

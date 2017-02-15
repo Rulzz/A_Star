@@ -9,20 +9,33 @@
     					"goalReached":true}
     	*/
     	
-    	
+    	$scope.gridEditable=false;
     	$scope.change = function() {
     			$scope.xy='Random';
     	}
     	
-    	$scope.getDefaultGrid = function() {
-    		
-        						GridLayoutService.getDefaultGrid() .then(function (response) {
+    	$scope.change = function(cell) {
+    		if($scope.gridEditable) {
+    			if(cell.cellStatus=='Blank') {
+        			cell.cellStatus='Block';
+        		} else if (cell.cellStatus=='Block') {
+        			cell.cellStatus='Blank';
+        		}
+    		}
+    	}
+    	
+    	$scope.getRandomGrid = function() {
+    							$scope.grid = null;
+    							$scope.gridEditable=false;
+        						GridLayoutService.getRandomGrid() .then(function (response) {
 				                    $scope.grid = response.data;
 				                }, function (error) {
 				                	console.log('Unable to load default data: ' + error.message);
 				                });	
         }
     	$scope.getCustomizedGrid = function() {
+    							$scope.grid = null;
+    							$scope.gridEditable=false;
     							var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
     							GridLayoutService.getCustomizedGrid(customizedParam) .then(function (response) {
 					                $scope.grid = response.data;
@@ -30,6 +43,26 @@
 					            	console.log('Unable to load default data: ' + error.message);
 					            });	
     	}
+    	
+    	$scope.getBasicGrid = function() {
+    							$scope.grid = null;
+    							$scope.gridEditable=true;
+								var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+								GridLayoutService.getBasicGrid(customizedParam) .then(function (response) {
+					                $scope.grid = response.data;
+					            }, function (error) {
+					            	console.log('Unable to load default data: ' + error.message);
+					            });	
+    	}
+    	$scope.solveCreatedMaze = function() {
+								$scope.gridEditable=false;
+								var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+								GridLayoutService.solveCreatedMaze(customizedParam+ '|' + angular.toJson($scope.grid)) .then(function (response) {
+					                $scope.grid = response.data;
+					            }, function (error) {
+					            	console.log('Unable to load default data: ' + error.message);
+					            });	
+		}
     	
     }])
 }());
