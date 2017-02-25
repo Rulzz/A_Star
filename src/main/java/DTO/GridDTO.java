@@ -1,8 +1,5 @@
 package DTO;
 
-import java.util.ArrayList;
-
-
 public class GridDTO {
 	
 	private CellDTO[][] maze;
