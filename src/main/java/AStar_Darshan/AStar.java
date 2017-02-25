@@ -169,6 +169,7 @@ public class AStar {
 			MazeCreator.setStartGoal(kMazeCopy, start, goal);
 			MazeCreator.setFinalPath(kMazeCopy, getPath());;
 			Grid grid = new Grid();
+			grid.setGoalReached(true);
 			grid.setMaze(kMazeCopy);
 			grids.add(grid);
 			System.out.println("I reached the target.");
