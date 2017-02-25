@@ -59,7 +59,6 @@ public class MazeCreator {
 	};
 
 	public static void generateChildren(Cell[][] maze) {
-		System.out.println("Inside Genereate Children");
 		for (int i = 0; i < maze.length; i++) {
 			for (int j = 0; j < maze[0].length; j++) {
 				maze[i][j].children = new TreeSet<Cell>(cellComparator);
@@ -159,6 +158,7 @@ public class MazeCreator {
 				kMaze[i][j] = new Cell(i, j);
 			}
 		}
+		generateChildren(kMaze);
 		return kMaze;
 	}
 

@@ -82,107 +82,121 @@ public class AStar {
 	}
 
 	public void executeAStar() {
-	//	while (!lastStep) {
-			while (!kStart.equalsTo(kGoal)) {
-				System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
-				counter++;
+		// while (!lastStep) {
+		while (!kStart.equalsTo(kGoal)) 
+		{
+			System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
+			counter++;
 
-				kStart.setgValue(0);
-				kStart.computeHValue(goal);
-				kStart.setSearch(counter);
+			kStart.setgValue(0);
+			kStart.computeHValue(goal);
+			kStart.setSearch(counter);
 
-				kGoal.setgValue(INFINITY);
-				kGoal.setSearch(counter);
+			kGoal.setgValue(INFINITY);
+			kGoal.setSearch(counter);
 
-				openPQueue.clear();
-				closedList.clear();
+			openPQueue.clear();
+			closedList.clear();
 
-				openPQueue.offer(kStart);
+			openPQueue.offer(kStart);
 
-				for (Cell child : kStart.children) {
+			for (Cell child : kStart.children) {
+				if (this.maze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
+					kMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
+				}
+			}
+
+			if (!openPQueue.isEmpty()) {
+				findPath();
+			}
+
+			if (openPQueue.isEmpty()) {
+				Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
+				MazeCreator.setStartGoal(kMazeCopy, start, goal);
+				MazeCreator.setFinalPath(kMazeCopy, getPath());
+				;
+				Grid grid = new Grid();
+				grid.setGoalReached(true);
+				grid.setMaze(kMazeCopy);
+				grids.add(grid);
+				finalPath.clear();
+				System.out.println("Target is not reachable.");
+				return;
+			}
+
+			ArrayList<Cell> forwardPath = move();
+
+			MazeCreator.display(kMaze);
+			Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
+			MazeCreator.setStartGoal(kMazeCopy, start, goal);
+			MazeCreator.setFinalPath(kMazeCopy, forwardPath);
+			Grid grid = new Grid();
+			grid.setMaze(kMazeCopy);
+			grids.add(grid);
+
+			System.out.println("I found Shortest Presumed Unblocked path.");
+			Iterator<Cell> FP1 = forwardPath.iterator();
+			while (FP1.hasNext()) {
+				Cell temp = FP1.next();
+				System.out.print(temp.getXY() + "," + temp.getgValue() + "->");
+			}
+			System.out.println();
+
+			Iterator<Cell> FP = forwardPath.iterator();
+		//	System.out.println("Size of Final Path : "+finalPath.size());
+			while (FP.hasNext()) {
+				Cell temp = FP.next();
+				if (maze[temp.getxCoordinate()][temp.getyCoordinate()].isObstacle()) {
+					finalPath.remove(temp);
+					break;
+				}
+				for (Cell child : temp.children) {
 					if (this.maze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
 						kMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
 					}
 				}
-
-				
-				
-				if (!openPQueue.isEmpty()) {
-					findPath();
+				if (!finalPath.contains(temp)) {
+					finalPath.add(temp);
 				}
-
-				if (openPQueue.isEmpty()) {
-					finalPath.clear();
-					System.out.println("Target is not reachable.");
-					return;
-				}
-				ArrayList<Cell> forwardPath = move();
-				
-				MazeCreator.display(kMaze);
-				Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
-				MazeCreator.setStartGoal(kMazeCopy, start, goal);
-				MazeCreator.setFinalPath(kMazeCopy, forwardPath);;
-				Grid grid = new Grid();
-				grid.setMaze(kMazeCopy);
-				grids.add(grid);
-				
-				System.out.println("I found Shortest Presumed Unblocked path.");
-				Iterator<Cell> FP1 = forwardPath.iterator();
-				while (FP1.hasNext()) {
-					Cell temp = FP1.next();
-					System.out.print(temp.getXY() + "," + temp.getgValue() + "->");
-				}
-				System.out.println();
-
-				Iterator<Cell> FP = forwardPath.iterator();
-
-				while (FP.hasNext()) {
-					Cell temp = FP.next();
-					if (maze[temp.getxCoordinate()][temp.getyCoordinate()].isObstacle()) {
-						finalPath.remove(temp);
-						break;
-					}
-					for (Cell child : temp.children) {
-						if (this.maze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
-							kMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
-						}
-					}
-					if (!finalPath.contains(temp)) {
-						finalPath.add(temp);
-					}
-				}
-				if(finalPath.size() == 0)
-				{
-					System.out.println("Failed");
-				}
-				kStart = finalPath.get(finalPath.size() - 1);
-				/*System.out.println(kStart.getXY());
-				System.out.println(kStart.equalsTo(kGoal));
-				if(kStart.equalsTo(kGoal) == true)
-				{
-					countGoalReached++;
-					System.out.println("countGoalReached"+countGoalReached);
-				}*/
-				numOfExpandedCells += closedList.size();
 			}
-			Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
-			MazeCreator.setStartGoal(kMazeCopy, start, goal);
-			MazeCreator.setFinalPath(kMazeCopy, getPath());;
-			Grid grid = new Grid();
-			grid.setGoalReached(true);
-			grid.setMaze(kMazeCopy);
-			grids.add(grid);
-			System.out.println("I reached the target.");
-			/*if(countGoalReached < 2)
-			{
-				System.out.println("Running A* for last time.");
-				kStart = kMaze[start.getxCoordinate()][start.getyCoordinate()];
-				System.out.println(kStart.getXY()+" "+kGoal.getXY());
-				finalPath.clear();
+		//	System.out.println("Current Final Path:");
+		/*	Iterator<Cell> fpIterator = finalPath.iterator();
+			while (fpIterator.hasNext()) {
+				Cell temp = FP1.next();
+				System.out.print(temp.getXY()+"->");
 			}
-			if(countGoalReached >= 2)
-				lastStep = true;;*/
-	//	}
+			System.out.println();
+			*/
+			if (finalPath.size() == 0) {
+				System.out.println("Failed");
+			}
+			kStart = finalPath.get(finalPath.size() - 1);
+			/*
+			 * System.out.println(kStart.getXY());
+			 * System.out.println(kStart.equalsTo(kGoal));
+			 * if(kStart.equalsTo(kGoal) == true) { countGoalReached++;
+			 * System.out.println("countGoalReached"+countGoalReached); }
+			 */
+			numOfExpandedCells += closedList.size();
+		}
+		
+		Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
+		MazeCreator.setStartGoal(kMazeCopy, start, goal);
+		MazeCreator.setFinalPath(kMazeCopy, getPath());
+		;
+		Grid grid = new Grid();
+		grid.setGoalReached(true);
+		grid.setMaze(kMazeCopy);
+		grids.add(grid);
+		System.out.println("I reached the target.");
+		/*
+		 * if(countGoalReached < 2) {
+		 * System.out.println("Running A* for last time."); kStart =
+		 * kMaze[start.getxCoordinate()][start.getyCoordinate()];
+		 * System.out.println(kStart.getXY()+" "+kGoal.getXY());
+		 * finalPath.clear(); } if(countGoalReached >= 2) lastStep = true;;
+		 */
+		// }
 	}
 
 	private void findPath() {
