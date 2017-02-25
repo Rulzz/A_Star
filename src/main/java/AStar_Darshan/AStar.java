@@ -151,6 +151,10 @@ public class AStar {
 						finalPath.add(temp);
 					}
 				}
+				if(finalPath.size() == 0)
+				{
+					System.out.println("Failed");
+				}
 				kStart = finalPath.get(finalPath.size() - 1);
 				/*System.out.println(kStart.getXY());
 				System.out.println(kStart.equalsTo(kGoal));

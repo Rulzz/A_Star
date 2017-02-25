@@ -59,7 +59,7 @@ public class Test {
 
 		 	System.out.println();
 		 	System.out.println("Total Grids"+A.getGrids().size());
-		 	Iterator<Grid> grids = A.getGrids().iterator();
+		 	/*Iterator<Grid> grids = A.getGrids().iterator();
 		 	int i =1;
 		 	while(grids.hasNext())
 		 	{
@@ -67,7 +67,7 @@ public class Test {
 		 		Grid grid = grids.next();
 		 		MazeCreator.display(grid.getMaze());
 		 		i++;
-		 	}
+		 	}*/
 		 	
 			System.out.println();
 			System.out.println("No of Expanded Cells:" + A.getNumOfExpandedCells());
