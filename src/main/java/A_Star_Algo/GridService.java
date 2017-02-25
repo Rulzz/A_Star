@@ -65,7 +65,7 @@ public class GridService {
 		Cell start,goal;
 		ArrayList<Grid> grids;
 		
-		MazeCreator mazeCreator = new MazeCreator(rows, columns);
+		MazeCreator mazeCreator = new MazeCreator(gridParam);
 		maze = mazeCreator.getMaze();
 
 		start = maze[startX][startY];

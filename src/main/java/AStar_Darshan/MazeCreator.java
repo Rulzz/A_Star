@@ -35,7 +35,8 @@ public class MazeCreator {
 			this.dy = dy;
 		}
 	}
-
+	
+	@Deprecated
 	public MazeCreator(int row, int column) {
 		maze = new Cell[row][column];
 		for (int i = 0; i < row; i++) {
@@ -44,11 +45,22 @@ public class MazeCreator {
 			}
 		}
 		generateChildren(this.maze);
-		generateMaze(0, 0);
+		generateMaze(0, 0, new GridParameters());
 	}
 
 	public MazeCreator() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public MazeCreator(GridParameters gridParameters) {
+		maze = new Cell[gridParameters.getLength()][gridParameters.getBreadth()];
+		for (int i = 0; i < gridParameters.getLength(); i++) {
+			for (int j = 0; j < gridParameters.getBreadth(); j++) {
+				maze[i][j] = new Cell(i, j);
+			}
+		}
+		generateChildren(this.maze);
+		generateMaze(0, 0, gridParameters);
 	}
 
 	private static Comparator<Cell> cellComparator = new Comparator<Cell>() {
@@ -89,7 +101,7 @@ public class MazeCreator {
 		return maze;
 	}
 
-	private void generateMaze(int x, int y) {
+	private void generateMaze(int x,int y, GridParameters gridParam) {
 
 		int row = maze.length;
 		int column = maze[0].length;
@@ -107,11 +119,10 @@ public class MazeCreator {
 			current.setVisited(true);
 
 			double decider = random.nextDouble();
-			if (decider < 0.3) {
+			if (decider < 0.3 && !((gridParam.getxGoal()==current.getxCoordinate() && gridParam.getyGoal()==current.getyCoordinate()) 
+										|| (gridParam.getxStart()==current.getxCoordinate() && gridParam.getyStart()==current.getyCoordinate()) )) {
 				current.setObstacle(true);
-			} else {
-				current.setObstacle(false);
-			}
+			} 
 			for (Cell child : current.children) {
 				if (!child.isVisited())
 					stack.push(child);
