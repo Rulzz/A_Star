@@ -53,7 +53,7 @@ public class AStar {
 		this.maze = maze;
 		this.start = start;
 		this.goal = goal;
-
+		
 		kMaze = MazeCreator.getCopyWithoutObstacle(maze);
 		MazeCreator.generateChildren(kMaze);
 
@@ -82,7 +82,15 @@ public class AStar {
 	}
 
 	public void executeAStar() {
+		if(start.isObstacle() == true)
+		{
+			System.out.println("Final Path is empty means somehow your start point is having obstacle istself. Please set to false everytime.");
+			return;
+		}
 		// while (!lastStep) {
+		System.out.println("--------------------------------------------");
+		MazeCreator.display(maze);
+		System.out.println("--------------------------------------------");
 		while (!kStart.equalsTo(kGoal)) 
 		{
 			System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
@@ -126,7 +134,7 @@ public class AStar {
 
 			ArrayList<Cell> forwardPath = move();
 
-			MazeCreator.display(kMaze);
+			//MazeCreator.display(kMaze);
 			Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
 			MazeCreator.setStartGoal(kMazeCopy, start, goal);
 			MazeCreator.setFinalPath(kMazeCopy, forwardPath);
@@ -143,7 +151,6 @@ public class AStar {
 			System.out.println();
 
 			Iterator<Cell> FP = forwardPath.iterator();
-		//	System.out.println("Size of Final Path : "+finalPath.size());
 			while (FP.hasNext()) {
 				Cell temp = FP.next();
 				if (maze[temp.getxCoordinate()][temp.getyCoordinate()].isObstacle()) {
@@ -151,7 +158,7 @@ public class AStar {
 					break;
 				}
 				for (Cell child : temp.children) {
-					if (this.maze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
+					if (this.maze[child.getxCoordinate()][child.getyCoordinate()].isObstacle() && !temp.equals(kGoal)) {
 						kMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
 					}
 				}
@@ -159,16 +166,10 @@ public class AStar {
 					finalPath.add(temp);
 				}
 			}
-		//	System.out.println("Current Final Path:");
-		/*	Iterator<Cell> fpIterator = finalPath.iterator();
-			while (fpIterator.hasNext()) {
-				Cell temp = FP1.next();
-				System.out.print(temp.getXY()+"->");
-			}
-			System.out.println();
-			*/
-			if (finalPath.size() == 0) {
-				System.out.println("Failed");
+			if(finalPath.isEmpty())
+			{
+				System.out.println("Final Path is empty means somehow your start point is having obstacle istself. Please set to false everytime.");
+				return;
 			}
 			kStart = finalPath.get(finalPath.size() - 1);
 			/*
@@ -227,13 +228,13 @@ public class AStar {
 				return;
 			}
 		}
-		System.out.println("OpenQueue:");
+		/*System.out.println("OpenQueue:");
 		Iterator<Cell> IQ = openPQueue.iterator();
 		while (IQ.hasNext()) {
 			Cell temp = IQ.next();
 			System.out.print(temp.getXY() + "," + temp.getgValue() + "->");
 		}
-		System.out.println();
+		System.out.println();*/
 	}
 
 	private ArrayList<Cell> move() {
