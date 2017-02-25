@@ -1,5 +1,6 @@
 package A_Star_Algo;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -88,4 +89,25 @@ public class GridResource {
 	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();
 	}
+	
+	@POST 
+	@Path("/repeatedAStar") 
+	@Produces(MediaType.APPLICATION_JSON) 
+	public Response solveRepeatedAstar(String param) throws JsonGenerationException, JsonMappingException, IOException { 
+		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
+		Grid grid1 = service.solveDefaultGrid();
+		Grid grid2 = service.solveDefaultGrid();
+		ArrayList<Grid> gridList = new ArrayList<>();
+		gridList.add(grid1);
+		gridList.add(grid2);
+		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(gridList);
+		String jsonInString = mapper.writeValueAsString(gridDTO);
+		return Response.status(200).header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();
+	}
+	
+	
 }
