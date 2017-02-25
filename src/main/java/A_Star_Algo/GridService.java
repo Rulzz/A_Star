@@ -77,7 +77,7 @@ public class GridService {
 
 		grids = repeatedForwardAStar.getGrids();
 		
-		return null;
+		return grids;
 	}
 	
 	
