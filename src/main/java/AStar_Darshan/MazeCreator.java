@@ -209,7 +209,7 @@ public class MazeCreator {
 	public static void setStartGoal(Cell[][] maze, Cell start, Cell goal)
 	{
 		maze[start.getxCoordinate()][start.getyCoordinate()].setStart(true);
-		maze[goal.getxCoordinate()][goal.getyCoordinate()].setStart(true);
+		maze[goal.getxCoordinate()][goal.getyCoordinate()].setEnd(true);
 	}
 	
 	
