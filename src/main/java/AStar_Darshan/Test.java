@@ -9,6 +9,8 @@ import java.util.Random;
 
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 
+import A_Star_Algo.Cell;
+
 /**
  * @author darsh
  *

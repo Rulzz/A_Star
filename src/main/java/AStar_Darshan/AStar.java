@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+import A_Star_Algo.Cell;
+
 /**
  * @author darsh
  *
@@ -22,15 +24,15 @@ public class AStar {
 	private int row, column;
 	private Cell[][] maze;
 	private Cell[][] kMaze;
-	private Cell start, kStart;
+	private Cell /*start,*/ kStart;
 	private Cell goal, kGoal;
 	private PriorityQueue<Cell> openPQueue;
 	private LinkedList<Cell> closedList;
-	private ArrayList<Cell> path, finalPath;
+	private ArrayList<Cell> /*path,*/ finalPath;
 	private int counter = 0;
 	private int numOfExpandedCells = 0;
-	private boolean lastStep = false;
-	private int countGoalReached =0;
+	/*private boolean lastStep = false;
+	private int countGoalReached =0;*/
 
 	private Comparator<Cell> cellComparator = new Comparator<Cell>() {
 		@Override
@@ -48,7 +50,7 @@ public class AStar {
 
 	public AStar(Cell[][] maze, Cell start, Cell goal) {
 		this.maze = maze;
-		this.start = start;
+		//this.start = start;
 		this.goal = goal;
 
 		kMaze = MazeCreator.getCopyWithoutObstacle(maze);
@@ -60,7 +62,7 @@ public class AStar {
 		openPQueue = new PriorityQueue<Cell>(cellComparator);
 		closedList = new LinkedList<Cell>();
 		finalPath = new ArrayList<Cell>();
-		path = new ArrayList<Cell>();
+		//path = new ArrayList<Cell>();
 
 		row = maze.length;
 		column = maze[0].length;
@@ -73,7 +75,7 @@ public class AStar {
 	}
 
 	public void executeAStar() {
-		while (!lastStep) {
+	//	while (!lastStep) {
 			while (!kStart.equalsTo(kGoal)) {
 				System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
 				counter++;
@@ -132,19 +134,19 @@ public class AStar {
 					if (!finalPath.contains(temp)) {
 						finalPath.add(temp);
 					}
-
 				}
 				kStart = finalPath.get(finalPath.size() - 1);
-				System.out.println(kStart.getXY());
+				/*System.out.println(kStart.getXY());
 				System.out.println(kStart.equalsTo(kGoal));
 				if(kStart.equalsTo(kGoal) == true)
 				{
 					countGoalReached++;
 					System.out.println("countGoalReached"+countGoalReached);
-				}
+				}*/
 				numOfExpandedCells += closedList.size();
 			}
-			if(countGoalReached < 2)
+			System.out.println("I reached the target.");
+			/*if(countGoalReached < 2)
 			{
 				System.out.println("Running A* for last time.");
 				kStart = kMaze[start.getxCoordinate()][start.getyCoordinate()];
@@ -152,10 +154,8 @@ public class AStar {
 				finalPath.clear();
 			}
 			if(countGoalReached >= 2)
-				lastStep = true;;
-		}
-		System.out.println("I reached the target.");
-
+				lastStep = true;;*/
+	//	}
 	}
 
 	private void findPath() {

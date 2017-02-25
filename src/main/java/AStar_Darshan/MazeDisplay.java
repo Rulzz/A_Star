@@ -2,6 +2,8 @@ package AStar_Darshan;
 
 import java.util.ArrayList;
 
+import A_Star_Algo.Cell;
+
 public class MazeDisplay {
 
 	public static void display(Cell[][] maze, ArrayList<Cell> path ) 

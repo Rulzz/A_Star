@@ -1,23 +1,29 @@
 package A_Star_Algo;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class Cell {
-	
+		
 	private int xCoordinate;
 	private int yCoordinate;
+	private String XY;
 	private boolean obstacle;
 	private boolean visited;
+	private int fValue;
+	private int gValue;
+	private int hValue;
+	private int search;
+	public Cell parent;
+	public TreeSet<Cell> children;
 	private boolean isStart;
 	private boolean isEnd;
 	private boolean onFinalPath;
 	private int heuristic;
 	private int steps;
 	private int stepsTillNow;
-	private Cell parent;
-	private ArrayList<Cell> children;
 	
-	//Cell tree;
+	private static final int C = 200000;
 	
 	public Cell() {
 		// TODO Auto-generated constructor stub
@@ -25,89 +31,143 @@ public class Cell {
 	
 	public Cell (int x, int y){
 		// Manually Generated
+		setSearch(0);
 		xCoordinate = x;
 		yCoordinate = y;
+		XY = Integer.toString(xCoordinate)+Integer.toString(yCoordinate);
 	}
-	/**
-	 * @return the xCoordinate
-	 */
+
 	public int getxCoordinate() {
 		return xCoordinate;
 	}
-	/**
-	 * @param xCoordinate the xCoordinate to set
-	 */
+	
 	public void setxCoordinate(int xCoordinate) {
 		this.xCoordinate = xCoordinate;
 	}
-	/**
-	 * @return the yCoordinate
-	 */
+	
+	public String getXY() {
+		return XY;
+	}
+
+	public void setXY(String xY) {
+		XY = xY;
+	}
+
 	public int getyCoordinate() {
 		return yCoordinate;
 	}
-	/**
-	 * @param yCoordinate the yCoordinate to set
-	 */
+	
 	public void setyCoordinate(int yCoordinate) {
 		this.yCoordinate = yCoordinate;
 	}
-	/**
-	 * @return the obstacle
-	 */
+	
 	public boolean isObstacle() {
 		return obstacle;
 	}
-	/**
-	 * @param obstacle the obstacle to set
-	 */
+	
 	public void setObstacle(boolean obstacle) {
 		this.obstacle = obstacle;
 	}
-	/**
-	 * @return the visited
-	 */
+	
 	public boolean isVisited() {
 		return visited;
 	}
-	/**
-	 * @param visited the visited to set
-	 */
+	
 	public void setVisited(boolean visited) {
 		this.visited = visited;
 	}
 	
+	public int getfValueLargerG()
+	{
+		return C * getfValue() - gValue;
+	}
 	
-	public ArrayList<Cell> getChildren() {
-		return this.children;
+	public int getfValueSmallerG()
+	{
+		return C * getfValue() + gValue;
+	}
+	
+	public int getfValue() {
+		computeFValue();
+		return fValue;
+	}
+	
+	private void computeFValue()
+	{
+		fValue = gValue + hValue;
+	}
+	
+	public void setfValue(int fValue) {
+		this.fValue = fValue;
 	}
 
+	public int getgValue() {
+		return gValue;
+	}
 	
-
-	public boolean isOnFinalPath() {
-		return onFinalPath;
+	public void setgValue(int gValue) {
+		this.gValue = gValue;
 	}
 
 	public void setOnFinalPath(boolean onFinalPath) {
 		this.onFinalPath = onFinalPath;
 	}
-
-	private Cell addIfAdmissible(ArrayList<Cell> neighbors, Grid grid, int x, int y, GridParameters param) {
-		if(x>=0 && x < param.getLength() && y>=0 && y < param.getBreadth() && !grid.getMaze()[x][y].isObstacle()) {
-			neighbors.add(grid.getMaze()[x][y]);
-		}
-		return null;
+	
+	public boolean isOnFinalPath() {
+		return onFinalPath;
 	}
 
+	public void computeHValue(Cell goal)
+	{
+		hValue = Math.abs(this.xCoordinate - goal.xCoordinate) + Math.abs(this.yCoordinate - goal.yCoordinate); // Manhattan distance
+		this.sethValue(hValue);
+	}
+	
+	public int gethValue() {
+		return hValue;
+	}
+	
+	public void sethValue(int hValue) {
+		this.hValue = hValue;
+	}
+	
+	public boolean equalsTo(Cell a)
+	{
+		return this.getxCoordinate() == a.getxCoordinate() && this.getyCoordinate() == a.getyCoordinate();
+	}
+	
+	public int getSearch() {
+		return search;
+	}
+
+	public void setSearch(int search) {
+		this.search = search;
+	}
+
+	public TreeSet<Cell> getChildren() {
+		return children;
+	}
+	
+	public void setChildren(TreeSet<Cell> children) {
+		this.children = children;
+	}
+	
 	public void setChildren(Grid grid, GridParameters param) {
-		ArrayList<Cell> neighbors = new ArrayList<>();
+		TreeSet<Cell> neighbors = new TreeSet<>();
 		addIfAdmissible(neighbors, grid, this.getxCoordinate()-1, this.getyCoordinate(), param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate()+1, this.getyCoordinate(), param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate(), this.getyCoordinate()-1, param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate(), this.getyCoordinate()+1, param);
 		this.children = (neighbors);
 	}
-
+	
+	private Cell addIfAdmissible(TreeSet<Cell> neighbors, Grid grid, int x, int y, GridParameters param) {
+		if(x>=0 && x < param.getLength() && y>=0 && y < param.getBreadth() && !grid.getMaze()[x][y].isObstacle()) {
+			neighbors.add(grid.getMaze()[x][y]);
+		}
+		return null;
+	}
+	
 	public boolean isStart() {
 		return isStart;
 	}

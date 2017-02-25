@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+import A_Star_Algo.Cell;
+
 public class AStarWithSmallerG {
 
 	private static final int INFINITY = Integer.MAX_VALUE - 100000;
