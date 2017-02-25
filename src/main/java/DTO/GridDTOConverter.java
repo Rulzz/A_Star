@@ -1,5 +1,7 @@
 package DTO;
 
+import java.util.ArrayList;
+
 import A_Star_Algo.Cell;
 import A_Star_Algo.Grid;
 
@@ -34,5 +36,13 @@ public Grid convert (GridDTO gridDTO) {
 		Grid grid = new Grid();
 		grid.setMaze(maze);
 		return grid;
+	}
+
+public ArrayList<GridDTO> convert(ArrayList<Grid> gridList) {
+		ArrayList<GridDTO> gridListDto = new ArrayList<>();
+		for(Grid grid : gridList) {
+			gridListDto.add(convert(grid));
+		}
+		return gridListDto;
 	}
 }
