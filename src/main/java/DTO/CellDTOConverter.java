@@ -1,15 +1,17 @@
 package DTO;
 
+import java.util.TreeSet;
+
 import A_Star_Algo.Cell;
 
 public class CellDTOConverter {
-	public CellDTO convert (Cell cell, Cell parent) { 
+	public CellDTO convert (Cell cell, String direction) { 
 		CellDTO cellDTO = new CellDTO();
 		cellDTO.setHeuristic(cell.getHeuristic());
 		cellDTO.setxCoordinate(cell.getxCoordinate());
 		cellDTO.setyCoordinate(cell.getyCoordinate());
 		cellDTO.setCellStatus(setCellStatus(cell));
-		cellDTO.setDirection(getDirection(cell,parent));
+		cellDTO.setDirection(direction);
 		cellDTO.setSteps(cell.getSteps());
 		cellDTO.setStepsTillNow(cell.getStepsTillNow());
 		return cellDTO;
@@ -24,21 +26,6 @@ public class CellDTOConverter {
 		cell.setObstacle(cellDTO.getCellStatus().equals(CellDTO.Status.Block.name()));
 		cell.setStart(cellDTO.getCellStatus().equals(CellDTO.Status.Start.name()));
 		return cell;
-	}
-
-	private String getDirection(Cell cell, Cell parent) {
-		if(parent!=null && cell.isOnFinalPath()) {
-			if(parent.getyCoordinate()<cell.getyCoordinate()) {
-				 return CellDTO.Direction.Right.name();
-			} else if(parent.getyCoordinate()>cell.getyCoordinate()) {
-				 return CellDTO.Direction.Left.name();
-			} else if(parent.getxCoordinate()<cell.getxCoordinate()) {
-				 return CellDTO.Direction.Down.name();
-			} else if(parent.getxCoordinate()>cell.getxCoordinate()) {
-				 return CellDTO.Direction.Up.name();
-			}
-		}
-		return "";
 	}
 
 	private String setCellStatus(Cell cell) {

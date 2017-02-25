@@ -116,7 +116,6 @@ public class MazeCreator {
 			if (current.isVisited()) {
 				continue;
 			}
-			current.setVisited(true);
 
 			double decider = random.nextDouble();
 			if (decider < 0.3 && !((gridParam.getxGoal()==current.getxCoordinate() && gridParam.getyGoal()==current.getyCoordinate()) 
