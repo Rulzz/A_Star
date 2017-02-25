@@ -10,6 +10,7 @@
     	*/
     	
     	$scope.gridEditable=false;
+    	$scope.gridIndex=0;
     	$scope.change = function() {
     			$scope.xy='Random';
     	}
@@ -21,6 +22,30 @@
         		} else if (cell.cellStatus=='Block') {
         			cell.cellStatus='Blank';
         		}
+    		}
+    	}
+    	
+    	$scope.getFirstStep = function() {
+    		$scope.grid = $scope.gridList[0];
+            $scope.gridIndex=0;
+    	}
+    	
+    	$scope.getLastStep = function() {
+    		$scope.grid = $scope.gridList[$scope.gridList.length-1];
+            $scope.gridIndex=$scope.gridList.length-1;
+    	}
+    	
+    	$scope.getPrevious = function() {
+    		if($scope.gridIndex>0) {
+    			$scope.gridIndex= $scope.gridIndex - 1;
+        		$scope.grid = $scope.gridList[$scope.gridIndex];
+    		}
+    	}
+    	
+    	$scope.getNext = function() {
+    		if($scope.gridIndex<$scope.gridList.length) {
+	    		$scope.gridIndex= $scope.gridIndex + 1;
+	    		$scope.grid = $scope.gridList[$scope.gridIndex];
     		}
     	}
     	
@@ -63,6 +88,19 @@
 					            	console.log('Unable to load default data: ' + error.message);
 					            });	
 		}
-    	
+    	$scope.getRepeatedAStar = function() {
+			$scope.grid = null;
+			$scope.gridList = null;
+			$scope.gridEditable=false;
+			var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+			GridLayoutService.getRepeatedAStar(customizedParam) .then(function (response) {
+                $scope.gridList = response.data;
+                $scope.grid = $scope.gridList[0];
+                $scope.gridIndex=0;
+            }, function (error) {
+            	console.log('Unable to load default data: ' + error.message);
+            });	
+		
+}
     }])
 }());

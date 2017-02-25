@@ -23,7 +23,6 @@ public class ExecuteAStar {
 		
 		if(isReached) {
 			grid.setGoalReached(true);
-			//getFinalPath(grid.getMaze()[param.getxGoal()][param.getyGoal()], finalPath);
 			setFinalPath(grid.getMaze()[param.getxGoal()][param.getyGoal()]);
 		}
 		
@@ -33,6 +32,7 @@ public class ExecuteAStar {
 	private static void setFinalPath(Cell cell) {
 		cell.setOnFinalPath(true);
 		if(cell.getParent()!=null) {
+			System.out.println("final Path of : " + cell.getxCoordinate() + "," + cell.getyCoordinate()); 
 			setFinalPath(cell.getParent());
 		}
 		
@@ -46,31 +46,19 @@ public class ExecuteAStar {
 			int leastEstimate = getLeastEstimate(estimateMap.keySet());
 			Cell currentNode =getCellWithLessHeuristic(estimateMap.get(leastEstimate));
 			
-			currentNode.setVisited(true);
-			Cell bestChild = getBestChild(currentNode);
-			if(bestChild==null) {
-				estimateMap.get(currentNode.getHeuristic()+currentNode.getSteps()).remove(currentNode);
-				if(estimateMap.get(currentNode.getHeuristic()+currentNode.getSteps()).isEmpty()) {
-					estimateMap.remove(currentNode.getHeuristic()+currentNode.getSteps());
-				}
+			if(currentNode.equals(goal)) {
+				isReached=true;
+				break;
 			}
-			else {
-				bestChild.setParent(currentNode);
-				
-				if(bestChild.equals(goal)) {
-					isReached=true;
-					break;
-				}
-				
-				bestChild.setSteps(bestChild.getParent().getSteps()+1);
-				
-				System.out.println("Expanded : " + bestChild.getxCoordinate() + "," + bestChild.getyCoordinate()); 
-				bestChild.setVisited(true);
-				bestChild.setStepsTillNow(stepsTillNow);
-				addRemoveEstimates(estimateMap, bestChild);
+			
+			System.out.println("Expanded : " + currentNode.getxCoordinate() + "," + currentNode.getyCoordinate()); 
+			currentNode.setVisited(true);
+			currentNode.setStepsTillNow(stepsTillNow);
+			addToEstimates(estimateMap, currentNode);
+			estimateMap.get(currentNode.getSteps() + currentNode.getHeuristic()).remove(currentNode);
 			}
 			stepsTillNow = stepsTillNow+1;
-		}
+		
 		return isReached;
 	}
 
@@ -95,22 +83,6 @@ public class ExecuteAStar {
 		return true;
 	}
 
-	private static Cell getBestChild(Cell parent) {
-		Integer leastStep = Integer.MAX_VALUE;
-		Cell nextNode = null;
-		
-		for(Cell child : parent.getChildren()) {
-			if(!child.isVisited()) {
-				if((child.getHeuristic()+parent.getSteps())<leastStep) {
-					leastStep = child.getHeuristic()+parent.getSteps();
-					nextNode=child;
-				}
-			}
-			
-		}
-		return nextNode;
-	}
-
 	private static Integer getLeastEstimate(Collection<Integer> values) {
 		Integer least = Integer.MAX_VALUE;
 		for(Integer value : values) {
@@ -121,29 +93,19 @@ public class ExecuteAStar {
 		return least;
 	}
 
-	private static void addRemoveEstimates(Map<Integer, ArrayList<Cell>> estimateMap, Cell node) {
-		
-		int estimate = node.getSteps() + node.getHeuristic();
-		
-		if(estimateMap.get(estimate) == null) {
-			estimateMap.put(estimate, new ArrayList<Cell>());
-			estimateMap.get(estimate).add(node);
-		} else {
-			estimateMap.get(estimate).add(node);
-		}
-		
-		boolean allChildrenVisited = true;
-		for(Cell child : node.getParent().getChildren()) {
+	private static void addToEstimates(Map<Integer, ArrayList<Cell>> estimateMap, Cell parent) {
+		int estimate;
+		for(Cell child : parent.getChildren()) {
 			if(!child.isVisited()) {
-				allChildrenVisited=false;
-				break;
-			}
-		}
-		if(allChildrenVisited) {
-			if(estimateMap.get(estimate) != null) {
-				estimateMap.get(estimate).remove(node.getParent());
-				if(estimateMap.get(estimate).isEmpty()) {
-					estimateMap.remove(estimate);
+				child.setParent(parent);
+				child.setSteps(parent.getSteps()+1);
+				estimate = child.getSteps() + child.getHeuristic();
+				if(estimateMap.get(estimate)==null) {
+					ArrayList<Cell> cells = new ArrayList<>();
+					cells.add(child);
+					estimateMap.put(estimate, cells);
+				} else {
+					estimateMap.get(estimate).add(child);
 				}
 			}
 		}
