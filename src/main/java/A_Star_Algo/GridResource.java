@@ -92,7 +92,7 @@ public class GridResource {
 	
 	@POST 
 	@Path("/repeatedAStar") 
-	@Produces(MediaType.APPLICATION_JSON) 
+	@Produces(MediaType.APPLICATION_JSON)  
 	public Response solveRepeatedAstar(String param) throws JsonGenerationException, JsonMappingException, IOException { 
 		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
 		Grid grid1 = service.solveDefaultGrid();
