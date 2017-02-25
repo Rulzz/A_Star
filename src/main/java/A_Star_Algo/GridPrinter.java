@@ -1,5 +1,7 @@
 package A_Star_Algo;
 
+import AStar_Darshan.MazeCreator;
+
 public class GridPrinter {
 	
 	public static void main(String[] args) {

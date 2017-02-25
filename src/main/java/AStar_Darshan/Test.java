@@ -10,6 +10,7 @@ import java.util.Random;
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 
 import A_Star_Algo.Cell;
+import A_Star_Algo.Grid;
 
 /**
  * @author darsh
@@ -56,6 +57,18 @@ public class Test {
 			System.out.println("Maze After AStar Search:");
 		 	MazeDisplay.display(maze, path);
 
+		 	System.out.println();
+		 	System.out.println("Total Grids"+A.getGrids().size());
+		 	Iterator<Grid> grids = A.getGrids().iterator();
+		 	int i =1;
+		 	while(grids.hasNext())
+		 	{
+		 		System.out.println("Grid No:"+i);
+		 		Grid grid = grids.next();
+		 		MazeCreator.display(grid.getMaze());
+		 		i++;
+		 	}
+		 	
 			System.out.println();
 			System.out.println("No of Expanded Cells:" + A.getNumOfExpandedCells());
 			System.out.println("No of Nodes : " + path.size());

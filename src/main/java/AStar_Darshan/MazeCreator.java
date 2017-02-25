@@ -3,17 +3,22 @@
  */
 package AStar_Darshan;
 
+import java.util.ArrayList;
+
 /**
  * @author darsh
  *
  */
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Stack;
 import java.util.TreeSet;
 
 import A_Star_Algo.Cell;
+import A_Star_Algo.Grid;
+import A_Star_Algo.GridParameters;
 
 public class MazeCreator {
 	private Cell[][] maze;
@@ -40,6 +45,10 @@ public class MazeCreator {
 		}
 		generateChildren(this.maze);
 		generateMaze(0, 0);
+	}
+
+	public MazeCreator() {
+		// TODO Auto-generated constructor stub
 	}
 
 	private static Comparator<Cell> cellComparator = new Comparator<Cell>() {
@@ -125,6 +134,21 @@ public class MazeCreator {
 		}
 		return newMaze;
 	}
+	
+	public static Cell[][] getCopy(Cell[][] maze) {
+		int rows = maze.length;
+		int cols = maze[0].length;
+
+		Cell[][] newMaze = new Cell[rows][cols];
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				newMaze[i][j] = new Cell(i, j);
+				newMaze[i][j].setObstacle(maze[i][j].isObstacle());
+			}
+		}
+		return newMaze;
+	}
 
 	public static Cell[][] getCopyWithoutObstacle(Cell[][] maze) {
 		int row = maze.length;
@@ -171,4 +195,90 @@ public class MazeCreator {
 			}
 		}
 	}
+	
+	public static void setFinalPath(Cell[][] maze, ArrayList<Cell> path)
+	{
+		Iterator<Cell> pathIterator = path.iterator();
+		while(pathIterator.hasNext())
+		{
+			Cell cell = pathIterator.next();
+			maze[cell.getxCoordinate()][cell.getyCoordinate()].setOnFinalPath(true);
+		}
+	}
+	
+	public static void setStartGoal(Cell[][] maze, Cell start, Cell goal)
+	{
+		maze[start.getxCoordinate()][start.getyCoordinate()].setStart(true);
+		maze[goal.getxCoordinate()][goal.getyCoordinate()].setStart(true);
+	}
+	
+	
+	//Raj's code
+	
+	public Grid createBasicMaze(GridParameters gridParam) {
+		Cell[][] maze = new Cell[gridParam.getLength()][gridParam.getBreadth()];
+		for(int x=0 ; x<gridParam.getLength(); x++) {
+			for(int y=0 ; y<gridParam.getBreadth(); y++) {
+				Cell xy = new Cell();
+				xy.setxCoordinate(x);
+				xy.setyCoordinate(y);
+				
+				if(x==gridParam.getxStart() && y==gridParam.getyStart()) {
+					xy.setStart(true);
+				}
+				if(x==gridParam.getxGoal() && y==gridParam.getyGoal()) {
+					xy.setEnd(true);
+				}
+				
+				xy.setHeuristic(Math.abs(gridParam.getxGoal()-x)+Math.abs(gridParam.getyGoal()-y));
+				
+				maze[x][y] = xy;
+			}
+		}
+		Grid grid = new Grid();
+		grid.setMaze(maze);
+		return grid;
+	}
+	
+	public Grid createMaze(GridParameters param) 
+	{
+		
+		Grid grid = createBasicMaze(param);
+		
+		for(int x=0 ; x<param.getLength(); x++) {
+			for(int y=0 ; y<param.getBreadth(); y++) {
+				grid.getMaze()[x][y].setChildren(grid, param);
+			}
+		}
+		
+		
+		generateBlocks(0,0, grid.getMaze()[0][0], param);
+		
+		populateChildren(grid, param);
+		
+		
+		return grid;
+	}
+	public void populateChildren(Grid grid, GridParameters param) {
+		for(int x=0 ; x<param.getLength(); x++) {
+			for(int y=0 ; y<param.getBreadth(); y++) {
+				grid.getMaze()[x][y].setChildren(grid, param);
+				grid.getMaze()[x][y].setVisited(false);
+			}
+		}
+		
+	}
+	private void generateBlocks(int row, int column, Cell node, GridParameters param) {
+		
+		if( Math.random()<0.1 && !((row==param.getxGoal() && column==param.getyGoal()) || (row==param.getxStart() && column==param.getyStart()))) {
+			node.setObstacle(true);
+		}
+		node.setVisited(true);
+		for(Cell child : node.getChildren()) {
+			if(!child.isVisited()) {
+				generateBlocks(child.getxCoordinate(), child.getyCoordinate(), child, param);
+			}
+		}
+	}
+	
 }

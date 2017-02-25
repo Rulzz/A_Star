@@ -95,12 +95,8 @@ public class GridResource {
 	@Produces(MediaType.APPLICATION_JSON)  
 	public Response solveRepeatedAstar(String param) throws JsonGenerationException, JsonMappingException, IOException { 
 		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
-		Grid grid1 = service.solveDefaultGrid();
-		Grid grid2 = service.solveDefaultGrid();
-		ArrayList<Grid> gridList = new ArrayList<>();
-		gridList.add(grid1);
-		gridList.add(grid2);
-		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(gridList);
+		ArrayList<Grid> grid = service.solveRepeatedAStar(gridParam);
+		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(grid);
 		String jsonInString = mapper.writeValueAsString(gridDTO);
 		return Response.status(200).header("Access-Control-Allow-Origin", "*")
 	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")

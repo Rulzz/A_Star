@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 import A_Star_Algo.Cell;
-
+import A_Star_Algo.Grid;
 /**
  * @author darsh
  *
@@ -24,13 +24,14 @@ public class AStar {
 	private int row, column;
 	private Cell[][] maze;
 	private Cell[][] kMaze;
-	private Cell /*start,*/ kStart;
+	private Cell start, kStart;
 	private Cell goal, kGoal;
 	private PriorityQueue<Cell> openPQueue;
 	private LinkedList<Cell> closedList;
 	private ArrayList<Cell> /*path,*/ finalPath;
 	private int counter = 0;
 	private int numOfExpandedCells = 0;
+	private ArrayList<Grid> grids;
 	/*private boolean lastStep = false;
 	private int countGoalReached =0;*/
 
@@ -50,7 +51,7 @@ public class AStar {
 
 	public AStar(Cell[][] maze, Cell start, Cell goal) {
 		this.maze = maze;
-		//this.start = start;
+		this.start = start;
 		this.goal = goal;
 
 		kMaze = MazeCreator.getCopyWithoutObstacle(maze);
@@ -58,7 +59,13 @@ public class AStar {
 
 		kStart = kMaze[start.getxCoordinate()][start.getyCoordinate()];
 		kGoal = kMaze[goal.getxCoordinate()][goal.getyCoordinate()];
-
+		
+		grids = new ArrayList<Grid>();
+		MazeCreator.setStartGoal(maze, start, goal);
+		Grid grid = new Grid();
+		grid.setMaze(maze);
+		grids.add(grid);
+		
 		openPQueue = new PriorityQueue<Cell>(cellComparator);
 		closedList = new LinkedList<Cell>();
 		finalPath = new ArrayList<Cell>();
@@ -98,8 +105,8 @@ public class AStar {
 					}
 				}
 
-				MazeCreator.display(kMaze);
-
+				
+				
 				if (!openPQueue.isEmpty()) {
 					findPath();
 				}
@@ -110,6 +117,15 @@ public class AStar {
 					return;
 				}
 				ArrayList<Cell> forwardPath = move();
+				
+				MazeCreator.display(kMaze);
+				Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
+				MazeCreator.setStartGoal(kMazeCopy, start, goal);
+				MazeCreator.setFinalPath(kMazeCopy, forwardPath);;
+				Grid grid = new Grid();
+				grid.setMaze(kMazeCopy);
+				grids.add(grid);
+				
 				System.out.println("I found Shortest Presumed Unblocked path.");
 				Iterator<Cell> FP1 = forwardPath.iterator();
 				while (FP1.hasNext()) {
@@ -145,6 +161,12 @@ public class AStar {
 				}*/
 				numOfExpandedCells += closedList.size();
 			}
+			Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
+			MazeCreator.setStartGoal(kMazeCopy, start, goal);
+			MazeCreator.setFinalPath(kMazeCopy, getPath());;
+			Grid grid = new Grid();
+			grid.setMaze(kMazeCopy);
+			grids.add(grid);
 			System.out.println("I reached the target.");
 			/*if(countGoalReached < 2)
 			{
@@ -223,5 +245,13 @@ public class AStar {
 
 	public int getNumOfExpandedCells() {
 		return numOfExpandedCells;
+	}
+
+	public ArrayList<Grid> getGrids() {
+		return grids;
+	}
+
+	public void setGrids(ArrayList<Grid> grids) {
+		this.grids = grids;
 	}
 }
