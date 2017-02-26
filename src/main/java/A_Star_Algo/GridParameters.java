@@ -7,6 +7,22 @@ public class GridParameters {
 	public int yStart;
 	public int xGoal;
 	public int yGoal;
+	
+	public GridParameters()
+	{
+		//Empty Constructor;
+	}
+	
+	// Created by Darshan.
+	public GridParameters(int length,int breadth,int xStart, int yStart, int xGoal, int yGoal)
+	{
+		this.length = length;
+		this.breadth = breadth;
+		this.xStart = xStart;  
+		this.yStart = yStart;
+		this.xGoal = xGoal;
+		this.yGoal = yGoal;
+	}
 	public int getLength() {
 		return length;
 	}
