@@ -11,84 +11,130 @@ public class AdaptiveAStar {
 	MazeCreator mazeCreator = new MazeCreator();
 	AStar aStar = new AStar();
 	
-	private boolean isAstarExecuted = false;
+	private boolean isGoalReached = false;
+	private boolean goalUnreachable = false;
 	
 	public ArrayList<Grid> solveAdaptiveAStar(Grid grid, GridParameters param) {
 		
 		ArrayList<Grid> allGrids = new ArrayList<>();
 		allGrids.add(grid);
 		Cell[][] initialMaze = grid.getMaze();
-		Cell[][] discoveredMaze = mazeCreator.getCopyWithoutObstacle(initialMaze);
-		ArrayList<Cell> finalPath = new ArrayList<>();
+		Cell[][] discoveredMaze = mazeCreator.getMazeCopy(initialMaze, false, true);
+		ArrayList<Cell> aStarPath = new ArrayList<>();
+		ArrayList<Cell> finalPath =new ArrayList<Cell>();
 		
-		Cell start = grid.getMaze()[param.getxStart()][param.getyStart()];
+		Cell start = discoveredMaze[param.getxStart()][param.getyStart()];
 		start.setVisited(true);
 		
 		
-		//set heuristic on initial discovered maze
+		Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
+		mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
+		mazeCopy[param.getxStart()][param.getyStart()].setStart(true);
+		aStar.execute(mazeCopy, param);
+		aStarPath.addAll(aStar.getPath());
+		updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
 		
-		ArrayList<Cell> openList = new ArrayList<>();
-		openList.add(start);
-		
-		while(!openList.isEmpty()) {
-			boolean isReached =getAdaptiveStep(finalPath, openList, initialMaze, discoveredMaze, param);
-			if(isAstarExecuted) {
-				Grid discoveredGrid = new Grid();
-				discoveredGrid.setMaze(discoveredMaze);
-				discoveredGrid.setGoalReached(isReached);
-				allGrids.add(discoveredGrid);
-				updateDiscoveredMaze(discoveredMaze, param);
-			}
+		while(!isGoalReached && !goalUnreachable) {
+			getAdaptiveStep(initialMaze, finalPath, discoveredMaze, param, allGrids, aStarPath);
 		}
-		
+		Grid intermediateGrid = new Grid();
+		mazeCreator.traceFinalPath(discoveredMaze, aStarPath);
+		mazeCreator.setPathDirection(discoveredMaze, aStarPath);
+		intermediateGrid.setMaze(discoveredMaze);
+		intermediateGrid.setGoalReached(isGoalReached);
+		allGrids.add(intermediateGrid);
 		return allGrids;
 	}
 
-	private boolean getAdaptiveStep(ArrayList<Cell> finalPath, ArrayList<Cell> openList, Cell[][] initialMaze, Cell[][] discoveredMaze, GridParameters param) {
-		isAstarExecuted=false;
-		Cell toExpand = getBestCellToExpand(openList);
+	private void getAdaptiveStep(Cell[][] initialMaze, ArrayList<Cell> finalPath, Cell[][] discoveredMaze, GridParameters param, ArrayList<Grid> allGrids, ArrayList<Cell> aStarPath) {
+		System.out.println("--------------------");
 		
-		finalPath.add(toExpand);
+		
+		System.out.println("final path : " + printOpenList(finalPath));
+		System.out.println("AStarPath path : " + printOpenList(aStarPath));
+		Cell toExpand = aStarPath.get(finalPath.size());
+		System.out.println("Expanding cell : " + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
+		
 		if (toExpand.getxCoordinate()==param.getxGoal() && toExpand.getyCoordinate()==param.getyGoal()) {
-			openList.clear();
-			return true;
+			System.out.println("GOAL REACHED!");
+			isGoalReached=true;
+			return;
 		}
 		
-		for(Cell child : toExpand.getChildrenList()) {   //gets all the children including blocks
-			child.setParent(toExpand);
-			if(child.isObstacle()) {
-				discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
-			} else {
-				openList.add(child);
+		if(initialMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].isObstacle()) {
+			System.out.println("--------------------");
+			System.out.println("BLOCK!! Inside A Star" + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
+			Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
+			mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
+			mazeCopy[aStarPath.get(finalPath.size()-1).getxCoordinate()][aStarPath.get(finalPath.size()-1).getyCoordinate()].setStart(true);
+			boolean isAstarReached = aStar.execute(mazeCopy, getParamCopy(toExpand, param));
+			aStarPath = updateAStarPath(aStarPath, finalPath, aStar.getPath());
+			mazeCreator.traceFinalPath(mazeCopy, aStarPath);
+			mazeCreator.setPathDirection(mazeCopy, aStarPath);
+			finalPath.add(aStarPath.get(finalPath.size()));
+			updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
+			
+			Grid intermediateGrid = new Grid();
+			intermediateGrid.setMaze(mazeCopy);
+			intermediateGrid.setGoalReached(isAstarReached);
+			allGrids.add(intermediateGrid);
+			if(!isAstarReached) {
+				goalUnreachable = true;
+				finalPath=aStarPath;
 			}
+			
+		} else {
+			finalPath.add(toExpand);
+			
+			for(Cell child : toExpand.getChildren()) {
+				
+				if(initialMaze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
+						discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
+				}
+			}
+			discoveredMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].setVisited(true);
 		}
 		
-		if(toExpand.isObstacle()) {
-			//run Astar on discovered maze
-			GridParameters newStartParam = new GridParameters();
-			newStartParam=param;
-			newStartParam.setxStart(toExpand.getParent().getxCoordinate());
-			newStartParam.setyStart(toExpand.getParent().getyCoordinate());
-			isAstarExecuted=true;
-			return aStar.execute(discoveredMaze, param);
-		}
 		
-		toExpand.setOnFinalPath(true);
-		openList.remove(toExpand);
-		
-		return false;
+		System.out.println(printOpenList(finalPath));
 		
 	}
 
-	private void updateDiscoveredMaze(Cell[][] discoveredMaze,GridParameters param) {
+	private ArrayList<Cell> updateAStarPath(ArrayList<Cell> oldPath, ArrayList<Cell> finalPath, ArrayList<Cell> newPath) {
+		oldPath.clear();
+		oldPath.addAll(finalPath);
+		oldPath.remove(finalPath.size()-1);
+		oldPath.addAll(newPath);
+		return oldPath;
+	}
+
+	private String printOpenList(ArrayList<Cell> openList) {
+		String openListString = "";
+		for(Cell cell : openList) {
+			openListString = openListString + " " + cell.getxCoordinate() + "," + cell.getyCoordinate() + ";";
+		}
+		return openListString;
+	}
+
+	private GridParameters getParamCopy(Cell toExpand, GridParameters param) {
+		GridParameters newStartParam= new GridParameters();
+		newStartParam.setxStart(toExpand.getParent().getxCoordinate());
+		newStartParam.setyStart(toExpand.getParent().getyCoordinate());
+		newStartParam.setxGoal(param.getxGoal());
+		newStartParam.setyGoal(param.getyGoal());
+		newStartParam.setBreadth(param.getBreadth());
+		newStartParam.setLength(param.getLength());
+		return newStartParam;
+	}
+
+	private void updateDiscoveredMaze(Cell[][] aStarMaze, Cell[][] discoveredMaze,GridParameters param) {
 		for (int i = 0; i < discoveredMaze.length; i++) {
 			for (int j = 0; j < discoveredMaze[1].length; j++) {
-				discoveredMaze[i][j].setNewHeuristic(discoveredMaze[param.getxGoal()][param.getyGoal()].getSteps() -discoveredMaze[i][j].getSteps());
-				discoveredMaze[i][j].setHeuristic(discoveredMaze[i][j].getNewHeuristic());
-				discoveredMaze[i][j].setParent(null);
-				discoveredMaze[i][j].setSteps(0);
-				discoveredMaze[i][j].setStepsTillNow(0);
-				discoveredMaze[i][j].setOnFinalPath(false);
+				discoveredMaze[i][j].setNewHeuristic(aStarMaze[param.getxGoal()][param.getyGoal()].getSteps() - aStarMaze[i][j].getSteps());
+				discoveredMaze[i][j].sethValue(discoveredMaze[i][j].getNewHeuristic());
+				if(discoveredMaze[i][j].isObstacle()) {
+					discoveredMaze[i][j].sethValue(Integer.MAX_VALUE);
+				}
 			}
 		}
 		
@@ -98,8 +144,8 @@ public class AdaptiveAStar {
 		int lowestH = Integer.MAX_VALUE;
 		Cell lowestHCell = new Cell();
 		for(Cell cell : openList) {
-			if(cell.getHeuristic()<lowestH) {
-				lowestH = cell.getHeuristic();
+			if(cell.gethValue()<lowestH) {
+				lowestH = cell.gethValue();
 				lowestHCell=cell;
 			}
 		}

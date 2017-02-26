@@ -24,6 +24,7 @@ public class Cell {
 	private int steps;
 	private int stepsTillNow;
 	private int newHeuristic;
+	private String direction="";
 	
 	private static final int C = 200000;
 	
@@ -154,19 +155,18 @@ public class Cell {
 		this.children = children;
 	}
 	
-	public void setChildrenList(Grid grid, GridParameters param) {
+	public void setChildrenList(Cell[][] maze, GridParameters param) {
 		ArrayList<Cell> neighbors = new ArrayList<>();
-		addIfAdmissible(neighbors, grid, this.getxCoordinate()-1, this.getyCoordinate(), param);
-		addIfAdmissible(neighbors, grid, this.getxCoordinate()+1, this.getyCoordinate(), param);
-		addIfAdmissible(neighbors, grid, this.getxCoordinate(), this.getyCoordinate()-1, param);
-		addIfAdmissible(neighbors, grid, this.getxCoordinate(), this.getyCoordinate()+1, param);
+		addIfAdmissible(neighbors, maze, this.getxCoordinate()-1, this.getyCoordinate(), param);
+		addIfAdmissible(neighbors, maze, this.getxCoordinate()+1, this.getyCoordinate(), param);
+		addIfAdmissible(neighbors, maze, this.getxCoordinate(), this.getyCoordinate()-1, param);
+		addIfAdmissible(neighbors, maze, this.getxCoordinate(), this.getyCoordinate()+1, param);
 		this.childrenList = neighbors;
 	}
 	
-	
-	private Cell addIfAdmissible(ArrayList<Cell> neighbors, Grid grid, int x, int y, GridParameters param) {
+	private Cell addIfAdmissible(ArrayList<Cell> neighbors, Cell[][] maze, int x, int y, GridParameters param) {
 		if(x>=0 && x < param.getLength() && y>=0 && y < param.getBreadth()) {
-			neighbors.add(grid.getMaze()[x][y]);
+			neighbors.add(maze[x][y]);
 		}
 		return null;
 	}
@@ -236,5 +236,12 @@ public class Cell {
 		return childrenList;
 	}
 
-	
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+
 }

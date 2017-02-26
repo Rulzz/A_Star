@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import A_Star_Algo.Cell;
 import A_Star_Algo.Grid;
 import A_Star_Algo.GridParameters;
+import DTO.CellDTO;
 
 public class MazeCreator {
 	private Cell[][] maze;
@@ -77,6 +78,35 @@ public class MazeCreator {
 				setChildren(maze[i][j], maze);
 			}
 		}
+	}
+	
+	public Cell[][] getMazeCopy(Cell[][] origMaze, boolean copyObstables, boolean copyHeuristics) {
+		
+		int row = origMaze.length;
+		int column = origMaze[0].length;
+		Cell[][] copy = new Cell[row][column];
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				copy[i][j] = new Cell(i, j);
+				if(copyObstables) {
+					copy[i][j].setObstacle(origMaze[i][j].isObstacle());
+				}
+				if(copyHeuristics) {
+					copy[i][j].sethValue(origMaze[i][j].gethValue());
+				}
+				if(origMaze[i][j].isStart()) {
+					copy[i][j].setStart(true);
+				}
+				if(origMaze[i][j].isEnd()) {
+					copy[i][j].setEnd(true);
+				}
+				
+				String XY = Integer.toString(i)+Integer.toString(j);
+				copy[i][j].setXY(XY);
+			}
+		}
+		generateChildren(copy);
+		return copy;
 	}
 
 	public static void setChildren(Cell cell, Cell[][] maze) {
@@ -159,6 +189,7 @@ public class MazeCreator {
 		}
 		return newMaze;
 	}
+	
 
 	public static Cell[][] getCopyWithoutObstacle(Cell[][] maze) {
 		int row = maze.length;
@@ -172,7 +203,7 @@ public class MazeCreator {
 		generateChildren(kMaze);
 		return kMaze;
 	}
-
+	
 	public void display() {
 		int rows = maze.length;
 		int cols = maze[0].length;
@@ -242,7 +273,7 @@ public class MazeCreator {
 				}
 				
 				xy.setHeuristic(Math.abs(gridParam.getxGoal()-x)+Math.abs(gridParam.getyGoal()-y));
-				
+				xy.sethValue(Math.abs(gridParam.getxGoal()-x)+Math.abs(gridParam.getyGoal()-y));
 				maze[x][y] = xy;
 			}
 		}
@@ -258,7 +289,7 @@ public class MazeCreator {
 		
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
-				grid.getMaze()[x][y].setChildrenList(grid, param);
+				grid.getMaze()[x][y].setChildrenList(grid.getMaze(), param);
 			}
 		}
 		
@@ -270,11 +301,22 @@ public class MazeCreator {
 		
 		return grid;
 	}
+	
 	public void populateChildren(Grid grid, GridParameters param) {
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
-				grid.getMaze()[x][y].setChildrenList(grid, param);
+				grid.getMaze()[x][y].setChildrenList(grid.getMaze(), param);
 				grid.getMaze()[x][y].setVisited(false);
+			}
+		}
+		
+	}
+	
+	public void populateChildren(Cell[][] maze, GridParameters param) {
+		for(int x=0 ; x<param.getLength(); x++) {
+			for(int y=0 ; y<param.getBreadth(); y++) {
+				maze[x][y].setChildrenList(maze, param);
+				maze[x][y].setVisited(false);
 			}
 		}
 		
@@ -292,6 +334,44 @@ public class MazeCreator {
 		}
 	}
 
-	
+	public void setXYandH(Cell[][] mazeXY, GridParameters gridParam) {
+		int rows = mazeXY.length;
+		int cols = mazeXY[0].length;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				String XY = Integer.toString(i)+Integer.toString(j);
+				mazeXY[i][j].setXY(XY);
+				mazeXY[i][j].setHeuristic(Math.abs(gridParam.getxGoal()-i)+Math.abs(gridParam.getyGoal()-j));
+				mazeXY[i][j].sethValue(Math.abs(gridParam.getxGoal()-i)+Math.abs(gridParam.getyGoal()-j));
+			}
+		}
+	}
+
+	public void traceFinalPath(Cell[][] maze, ArrayList<Cell> finalPath) {
+		for(Cell path : finalPath) {
+			maze[path.getxCoordinate()][path.getyCoordinate()].setOnFinalPath(true);
+		}
+		
+	}
+
+	public void setPathDirection(Cell[][] mazeCopy, ArrayList<Cell> finalPath) {
+		for(int i=0 ; i<finalPath.size()-1 ; i++) {
+			mazeCopy[finalPath.get(i).getxCoordinate()][finalPath.get(i).getyCoordinate()].setDirection(setDirection(finalPath.get(i), finalPath.get(i+1)));
+		}
+		
+	}
+
+	private String setDirection(Cell current, Cell next) {
+		if(current.getxCoordinate()<next.getxCoordinate()) {
+			return CellDTO.Direction.Down.name();
+		} else if (current.getxCoordinate()>next.getxCoordinate()) {
+			return CellDTO.Direction.Up.name();
+		} else if (current.getyCoordinate()<next.getyCoordinate()) {
+			return CellDTO.Direction.Right.name();
+		} else if (current.getyCoordinate()>next.getyCoordinate()) {
+			return CellDTO.Direction.Left.name();
+		}
+		return "";
+	}
 	
 }

@@ -68,6 +68,7 @@ public class AStar {
 		
 		openPQueue.clear();
 		closedList.clear();
+		path.clear();
 		
 		openPQueue.offer(start);
 		
