@@ -78,6 +78,25 @@ public class MazeCreator {
 			}
 		}
 	}
+	
+	public Cell[][] getMazeCopy(Cell[][] maze, boolean copyObstables, boolean copyHeuristics) {
+		
+		Cell[][] copy = new Cell[maze.length][maze[0].length];
+		for (int i = 0; i < maze.length; i++) {
+			for (int j = 0; j < maze[0].length; j++) {
+				copy[i][j].children = new TreeSet<Cell>(cellComparator);
+				setChildren(copy[i][j], copy);
+				if(copyObstables) {
+					copy[i][j].setObstacle(copy[i][j].isObstacle());
+				}
+				if(copyHeuristics) {
+					copy[i][j].sethValue(copy[i][j].gethValue());
+				}
+			}
+		}
+		
+		return copy;
+	}
 
 	public static void setChildren(Cell cell, Cell[][] maze) {
 
@@ -159,6 +178,7 @@ public class MazeCreator {
 		}
 		return newMaze;
 	}
+	
 
 	public static Cell[][] getCopyWithoutObstacle(Cell[][] maze) {
 		int row = maze.length;
@@ -172,7 +192,7 @@ public class MazeCreator {
 		generateChildren(kMaze);
 		return kMaze;
 	}
-
+	
 	public void display() {
 		int rows = maze.length;
 		int cols = maze[0].length;
@@ -258,7 +278,7 @@ public class MazeCreator {
 		
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
-				grid.getMaze()[x][y].setChildrenList(grid, param);
+				grid.getMaze()[x][y].setChildrenList(grid.getMaze(), param);
 			}
 		}
 		
@@ -270,11 +290,22 @@ public class MazeCreator {
 		
 		return grid;
 	}
+	
 	public void populateChildren(Grid grid, GridParameters param) {
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
-				grid.getMaze()[x][y].setChildrenList(grid, param);
+				grid.getMaze()[x][y].setChildrenList(grid.getMaze(), param);
 				grid.getMaze()[x][y].setVisited(false);
+			}
+		}
+		
+	}
+	
+	public void populateChildren(Cell[][] maze, GridParameters param) {
+		for(int x=0 ; x<param.getLength(); x++) {
+			for(int y=0 ; y<param.getBreadth(); y++) {
+				maze[x][y].setChildrenList(maze, param);
+				maze[x][y].setVisited(false);
 			}
 		}
 		

@@ -21,7 +21,7 @@ public class AdaptiveAStar {
 		Cell[][] discoveredMaze = mazeCreator.getCopyWithoutObstacle(initialMaze);
 		ArrayList<Cell> finalPath = new ArrayList<>();
 		
-		Cell start = grid.getMaze()[param.getxStart()][param.getyStart()];
+		Cell start = discoveredMaze[param.getxStart()][param.getyStart()];
 		start.setVisited(true);
 		
 		
@@ -31,7 +31,7 @@ public class AdaptiveAStar {
 		openList.add(start);
 		
 		while(!openList.isEmpty()) {
-			boolean isReached =getAdaptiveStep(finalPath, openList, initialMaze, discoveredMaze, param);
+			boolean isReached =getAdaptiveStep(initialMaze, openList, discoveredMaze, param);
 			if(isAstarExecuted) {
 				Grid discoveredGrid = new Grid();
 				discoveredGrid.setMaze(discoveredMaze);
@@ -44,23 +44,28 @@ public class AdaptiveAStar {
 		return allGrids;
 	}
 
-	private boolean getAdaptiveStep(ArrayList<Cell> finalPath, ArrayList<Cell> openList, Cell[][] initialMaze, Cell[][] discoveredMaze, GridParameters param) {
+	private boolean getAdaptiveStep(Cell[][] initialMaze, ArrayList<Cell> openList, Cell[][] discoveredMaze, GridParameters param) {
 		isAstarExecuted=false;
 		Cell toExpand = getBestCellToExpand(openList);
+		System.out.println("Expanding cell : " + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 		
-		finalPath.add(toExpand);
 		if (toExpand.getxCoordinate()==param.getxGoal() && toExpand.getyCoordinate()==param.getyGoal()) {
 			openList.clear();
 			return true;
 		}
 		
 		for(Cell child : toExpand.getChildrenList()) {   //gets all the children including blocks
-			child.setParent(toExpand);
-			if(child.isObstacle()) {
-				discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
-			} else {
-				openList.add(child);
+			
+			if(discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].isVisited()) {
+				continue;
 			}
+			
+			
+			if(initialMaze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
+					discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
+			}
+			child.setParent(toExpand);
+			openList.add(child);	
 		}
 		
 		if(toExpand.isObstacle()) {
@@ -69,11 +74,15 @@ public class AdaptiveAStar {
 			newStartParam=param;
 			newStartParam.setxStart(toExpand.getParent().getxCoordinate());
 			newStartParam.setyStart(toExpand.getParent().getyCoordinate());
+			newStartParam.setxGoal(param.getxGoal());
+			newStartParam.setyGoal(param.getyGoal());
 			isAstarExecuted=true;
-			return aStar.execute(discoveredMaze, param);
+			Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);//add goal start
+			return aStar.execute(mazeCopy, param);
 		}
 		
-		toExpand.setOnFinalPath(true);
+		//tracingMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].setOnFinalPath(true);
+		//tracingMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].setVisited(true);
 		openList.remove(toExpand);
 		
 		return false;
