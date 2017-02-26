@@ -373,5 +373,25 @@ public class MazeCreator {
 		}
 		return "";
 	}
+
+	public void printMaze(Cell[][] mazePrint) {
+		int rows = mazePrint.length;
+		int cols = mazePrint[0].length;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				if(mazePrint[i][j].isStart()) {
+					System.out.print("S");
+				} else if(mazePrint[i][j].isEnd()) {
+					System.out.print("G");
+				} else if(mazePrint[i][j].isObstacle()) {
+					System.out.print("X");
+				} else {
+					System.out.print("_");
+				}
+			}
+			System.out.println();
+		}
+		
+	}
 	
 }

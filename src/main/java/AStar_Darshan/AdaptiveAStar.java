@@ -25,6 +25,11 @@ public class AdaptiveAStar {
 		
 		Cell start = discoveredMaze[param.getxStart()][param.getyStart()];
 		start.setVisited(true);
+		for(Cell child : start.getChildren()) {
+			if(initialMaze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
+					discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
+			}
+		}
 		
 		
 		Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
@@ -65,9 +70,12 @@ public class AdaptiveAStar {
 			System.out.println("--------------------");
 			System.out.println("BLOCK!! Inside A Star" + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 			Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
+			Cell newStart = aStarPath.get(finalPath.size()-1);
+			System.out.println("New Start cell : " + newStart.getxCoordinate() + "," + newStart.getyCoordinate());
 			mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
-			mazeCopy[aStarPath.get(finalPath.size()-1).getxCoordinate()][aStarPath.get(finalPath.size()-1).getyCoordinate()].setStart(true);
-			boolean isAstarReached = aStar.execute(mazeCopy, getParamCopy(toExpand, param));
+			mazeCopy[newStart.getxCoordinate()][newStart.getyCoordinate()].setStart(true);
+			boolean isAstarReached = aStar.execute(mazeCopy, getParamCopy(newStart, param));
+			System.out.println("AStarPath path : " + printOpenList( aStar.getPath()));
 			if(isAstarReached) {
 				aStarPath = updateAStarPath(aStarPath, finalPath, aStar.getPath());
 				mazeCreator.traceFinalPath(mazeCopy, aStarPath);
@@ -118,10 +126,10 @@ public class AdaptiveAStar {
 		return openListString;
 	}
 
-	private GridParameters getParamCopy(Cell toExpand, GridParameters param) {
+	private GridParameters getParamCopy(Cell start, GridParameters param) {
 		GridParameters newStartParam= new GridParameters();
-		newStartParam.setxStart(toExpand.getParent().getxCoordinate());
-		newStartParam.setyStart(toExpand.getParent().getyCoordinate());
+		newStartParam.setxStart(start.getxCoordinate());
+		newStartParam.setyStart(start.getyCoordinate());
 		newStartParam.setxGoal(param.getxGoal());
 		newStartParam.setyGoal(param.getyGoal());
 		newStartParam.setBreadth(param.getBreadth());

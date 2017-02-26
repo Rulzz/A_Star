@@ -66,7 +66,10 @@ public class AStar {
 */		
 		start = maze[gridParam.xStart][gridParam.yStart];
 		goal = maze[gridParam.xGoal][gridParam.yGoal];
-		
+		MazeCreator creator = new MazeCreator();
+		creator.printMaze(maze);
+		System.out.println("A STAR Start cell : " + start.getxCoordinate() + "," + start.getyCoordinate());
+		System.out.println("A GOAL Start cell : " + goal.getxCoordinate() + "," + goal.getyCoordinate());
 		for(int i=0;i<maze.length;i++)
 		{
 			for(int j=0;j<maze[0].length;j++)
