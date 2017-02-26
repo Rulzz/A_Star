@@ -68,20 +68,22 @@ public class AdaptiveAStar {
 			mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
 			mazeCopy[aStarPath.get(finalPath.size()-1).getxCoordinate()][aStarPath.get(finalPath.size()-1).getyCoordinate()].setStart(true);
 			boolean isAstarReached = aStar.execute(mazeCopy, getParamCopy(toExpand, param));
-			aStarPath = updateAStarPath(aStarPath, finalPath, aStar.getPath());
-			mazeCreator.traceFinalPath(mazeCopy, aStarPath);
-			mazeCreator.setPathDirection(mazeCopy, aStarPath);
-			finalPath.add(aStarPath.get(finalPath.size()));
-			updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
-			
-			Grid intermediateGrid = new Grid();
-			intermediateGrid.setMaze(mazeCopy);
-			intermediateGrid.setGoalReached(isAstarReached);
-			allGrids.add(intermediateGrid);
-			if(!isAstarReached) {
+			if(isAstarReached) {
+				aStarPath = updateAStarPath(aStarPath, finalPath, aStar.getPath());
+				mazeCreator.traceFinalPath(mazeCopy, aStarPath);
+				mazeCreator.setPathDirection(mazeCopy, aStarPath);
+				finalPath.add(aStarPath.get(finalPath.size()));
+				updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
+				
+				Grid intermediateGrid = new Grid();
+				intermediateGrid.setMaze(mazeCopy);
+				intermediateGrid.setGoalReached(isAstarReached);
+				allGrids.add(intermediateGrid);
+			} else {
 				goalUnreachable = true;
 				finalPath=aStarPath;
 			}
+			
 			
 		} else {
 			finalPath.add(toExpand);

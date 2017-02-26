@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 
 import A_Star_Algo.Cell;
 
-public class AStarWithSmallerG {
+public class RFAStarWithSG {
 
 	private static final int INFINITY = Integer.MAX_VALUE - 100000;
 	private int row, column;
@@ -23,7 +23,7 @@ public class AStarWithSmallerG {
 	private Neighbours[] neighbours = { new Neighbours(0, -1), new Neighbours(1, 0), new Neighbours(0, 1),
 			new Neighbours(-1, 0) };
 
-	public AStarWithSmallerG() {
+	public RFAStarWithSG() {
 	}
 
 	private class Neighbours {
@@ -46,7 +46,7 @@ public class AStarWithSmallerG {
 		}
 	};
 
-	public AStarWithSmallerG(Cell[][] maze, Cell start, Cell goal) {
+	public RFAStarWithSG(Cell[][] maze, Cell start, Cell goal) {
 		this.maze = maze;
 		this.start = start;
 		this.goal = goal;
