@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class ExecuteAStar {
 
-	public static ArrayList<Cell> execute(Grid grid, GridParameters param) {
+	public static boolean execute(Cell[][] maze, GridParameters param) {
 		
-		Cell start = grid.getMaze()[param.getxStart()][param.getyStart()];
+		Cell start = maze[param.getxStart()][param.getyStart()];
 		Cell goal = new Cell();
 		goal.setxCoordinate(param.getxGoal());
 		goal.setyCoordinate(param.getyGoal());
@@ -22,11 +22,11 @@ public class ExecuteAStar {
 		isReached = tracePath(estimateMap, goal);
 		
 		if(isReached) {
-			grid.setGoalReached(true);
-			setFinalPath(grid.getMaze()[param.getxGoal()][param.getyGoal()]);
+			//grid.setGoalReached(true);
+			setFinalPath(maze[param.getxGoal()][param.getyGoal()]);
 		}
 		
-		return finalPath;
+		return isReached;
 	}
 
 	private static void setFinalPath(Cell cell) {
@@ -95,7 +95,7 @@ public class ExecuteAStar {
 
 	private static void addToEstimates(Map<Integer, ArrayList<Cell>> estimateMap, Cell parent) {
 		int estimate;
-		for(Cell child : parent.getChildren()) {
+		for(Cell child : parent.getChildrenList()) {
 			if(!child.isVisited()) {
 				child.setParent(parent);
 				child.setSteps(parent.getSteps()+1);

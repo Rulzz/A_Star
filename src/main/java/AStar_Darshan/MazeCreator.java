@@ -285,11 +285,13 @@ public class MazeCreator {
 			node.setObstacle(true);
 		}
 		node.setVisited(true);
-		for(Cell child : node.getChildren()) {
+		for(Cell child : node.getChildrenList()) {
 			if(!child.isVisited()) {
 				generateBlocks(child.getxCoordinate(), child.getyCoordinate(), child, param);
 			}
 		}
 	}
+
+	
 	
 }

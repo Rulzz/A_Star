@@ -1,22 +1,21 @@
 package A_Star_Algo;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-
-import com.sun.jersey.spi.monitoring.ResponseListenerAdapter;
 
 import AStar_Darshan.AStar;
+import AStar_Darshan.AdaptiveAStar;
 import AStar_Darshan.MazeCreator;
 
 public class GridService {
 	
 	MazeCreator mazeCreator = new MazeCreator();
+	AdaptiveAStar adaptive = new AdaptiveAStar();
 	
 	public Grid solveDefaultGrid() {
 		GridParameters defaultParam = getDefaultGridParameters();
 		Grid grid = mazeCreator.createMaze(defaultParam);
 		
-		ExecuteAStar.execute(grid, defaultParam);
+		grid.setGoalReached(ExecuteAStar.execute(grid.getMaze(), defaultParam));
 		
 		return grid;
 	}
@@ -37,7 +36,7 @@ public class GridService {
 		
 		Grid grid = mazeCreator.createMaze(param);
 		
-		ExecuteAStar.execute(grid, param);
+		grid.setGoalReached(ExecuteAStar.execute(grid.getMaze(), param));
 		return grid;
 	}
 
@@ -48,7 +47,7 @@ public class GridService {
 
 	public Grid solveCreatedMaze(Grid grid, GridParameters gridParam) {
 		mazeCreator.populateChildren(grid, gridParam);
-		ExecuteAStar.execute(grid, gridParam);
+		grid.setGoalReached(ExecuteAStar.execute(grid.getMaze(), gridParam));
 		return grid;
 	}
 
@@ -78,6 +77,16 @@ public class GridService {
 		grids = repeatedForwardAStar.getGrids();
 		
 		return grids;
+	}
+	
+	public ArrayList<Grid> solveAdaptiveAStar(GridParameters gridParam) {
+		
+		MazeCreator mazeCreator = new MazeCreator();
+		Grid initialGrid = mazeCreator.createMaze(gridParam);
+
+		ArrayList<Grid> allGrids = adaptive.solveAdaptiveAStar(initialGrid, gridParam);
+		
+		return allGrids;
 	}
 	
 	

@@ -1,6 +1,7 @@
 package A_Star_Algo;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.TreeSet;
 
 public class Cell {
@@ -16,12 +17,14 @@ public class Cell {
 	private int search;
 	public Cell parent;
 	public TreeSet<Cell> children;
+	public ArrayList<Cell> childrenList;
 	private boolean isStart;
 	private boolean isEnd;
 	private boolean onFinalPath;
 	private int heuristic;
 	private int steps;
 	private int stepsTillNow;
+	private int newHeuristic;
 	
 	private static final int C = 200000;
 	
@@ -153,16 +156,17 @@ public class Cell {
 	}
 	
 	public void setChildren(Grid grid, GridParameters param) {
-		TreeSet<Cell> neighbors = new TreeSet<>();
+		ArrayList<Cell> neighbors = new ArrayList<>();
 		addIfAdmissible(neighbors, grid, this.getxCoordinate()-1, this.getyCoordinate(), param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate()+1, this.getyCoordinate(), param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate(), this.getyCoordinate()-1, param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate(), this.getyCoordinate()+1, param);
-		this.children = (neighbors);
+		this.setChildrenList(neighbors);
 	}
 	
-	private Cell addIfAdmissible(TreeSet<Cell> neighbors, Grid grid, int x, int y, GridParameters param) {
-		if(x>=0 && x < param.getLength() && y>=0 && y < param.getBreadth() && !grid.getMaze()[x][y].isObstacle()) {
+	
+	private Cell addIfAdmissible(ArrayList<Cell> neighbors, Grid grid, int x, int y, GridParameters param) {
+		if(x>=0 && x < param.getLength() && y>=0 && y < param.getBreadth()) {
 			neighbors.add(grid.getMaze()[x][y]);
 		}
 		return null;
@@ -219,6 +223,22 @@ public class Cell {
 
 	public boolean equals(Cell cell) {
 	    return (this.getxCoordinate()== cell.getxCoordinate() && this.getyCoordinate()== cell.getyCoordinate());
+	}
+
+	public int getNewHeuristic() {
+		return newHeuristic;
+	}
+
+	public void setNewHeuristic(int newHeuristic) {
+		this.newHeuristic = newHeuristic;
+	}
+
+	public ArrayList<Cell> getChildrenList() {
+		return childrenList;
+	}
+
+	public void setChildrenList(ArrayList<Cell> childrenList) {
+		this.childrenList = childrenList;
 	}
 	
 	

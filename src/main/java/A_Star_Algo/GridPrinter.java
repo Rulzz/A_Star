@@ -10,7 +10,7 @@ public class GridPrinter {
 		GridParameters param = service.getDefaultGridParameters();
 		Grid grid = mazeCreator.createMaze(param);
 		
-		ExecuteAStar.execute(grid, service.getDefaultGridParameters());
+		ExecuteAStar.execute(grid.getMaze(), service.getDefaultGridParameters());
 		
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
