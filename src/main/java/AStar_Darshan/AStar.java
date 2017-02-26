@@ -170,4 +170,8 @@ public class AStar {
 		return numOfExpandedCells;
 	}
 	
+	public LinkedList<Cell> getClosedList() {
+		return closedList;
+	}
+	
 }

@@ -1,6 +1,7 @@
 package TestClasses;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import AStar_Darshan.AStar;
 import AStar_Darshan.MazeCreator;
@@ -37,6 +38,13 @@ public class TestStandaloneAStar {
 		AStar aStar = new AStar();
 		aStar.execute(maze, gridParam);
 		ArrayList<Cell> path = aStar.getPath();
+		
+		LinkedList<Cell> closedList = aStar.getClosedList();
+		for(Cell c:closedList)
+		{
+			System.out.print(c.getXY()+"->");
+		}
+		System.out.println();
 		
 		if(!path.isEmpty())
 		{

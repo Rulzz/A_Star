@@ -134,6 +134,10 @@ public class Cell {
 		this.hValue = hValue;
 	}
 	
+	public void setHnew(Cell goal) {
+		hValue = goal.getgValue() - gValue;
+	}
+	
 	public boolean equalsTo(Cell a)
 	{
 		return this.getxCoordinate() == a.getxCoordinate() && this.getyCoordinate() == a.getyCoordinate();

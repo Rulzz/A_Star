@@ -23,13 +23,13 @@ import A_Star_Algo.GridParameters;
  */
 public class Test {
 
-	private static final int SIZE = 50;
+	private static final int SIZE = 101;
 
 	public static void main(String[] args) {
 		
 			System.out.println("----------------------------------------------------------------------------------------");
 			int startX, startY, goalX, goalY;
-			startX = 0; startY = 0; goalX = 49; goalY = 49;
+			startX = 0; startY = 0; goalX = 100; goalY = 100;
 			
 			//Random random = new Random();
 			/*startX = random.nextInt(SIZE);
@@ -53,6 +53,7 @@ public class Test {
 			System.out.println("Start X : " + start.getxCoordinate() + " Y:" + start.getyCoordinate());
 			System.out.println("Goal X : " + goal.getxCoordinate() + " Y:" + goal.getyCoordinate());
 			System.out.println();
+			
 			RFAStar A = new RFAStar(maze, start, goal);
 
 			A.executeAStar();
@@ -127,6 +128,7 @@ public class Test {
 	//	 	MazeDisplay.display(mazeLG, pathLG);
 
 			System.out.println();
+			System.out.println("Total Grids"+rfaStarWithLG.getGrids().size());
 			System.out.println("No of Expanded Cells:" + rfaStarWithLG.getNumOfExpandedCells());
 			System.out.println("No of Nodes in Path:" + rfaStarWithLG.getPath().size());
 			System.out.println("Path:");
@@ -136,11 +138,11 @@ public class Test {
 				System.out.print(IPLG.next().getXY() + "->");
 			}
 			System.out.println();
-
-			System.out.print("\n\n\n");
 			System.out.println("----------------------------------------------------------------------------------------");
+			System.out.print("\n\n\n");
 /*----------------------------------------------------------------------------------------------------------------------*/			
-/*			System.out.println("AStarWithSmallerG");
+			System.out.println("----------------------------------------------------------------------------------------");
+			System.out.println("AStarWithSmallerG");
 
 			Cell[][] mazeSG = mazeCreator.getCopy();
 
@@ -149,14 +151,15 @@ public class Test {
 			start.setObstacle(false);
 			goal.setObstacle(false);
 
-			AStarWithSmallerG AWithSmallerG = new AStarWithSmallerG(mazeSG, start, goal);
-			AWithSmallerG.executeAStarWithSmallerG();
+			RFAStarWithLG AWithSmallerG = new RFAStarWithLG(mazeSG, start, goal);
+			AWithSmallerG.executeAStar();
 		//	ArrayList<Cell> pathSG = AWithSmallerG.getPath();
 
-			System.out.println("Maze after A* with Smaller G value.");
+		//	System.out.println("Maze after A* with Smaller G value.");
 		// 	MazeDisplay.display(mazeSG, pathSG);
 
 			System.out.println();
+			System.out.println("Total Grids"+AWithSmallerG.getGrids().size());
 			System.out.println("No of Expanded Cells:" + AWithSmallerG.getNumOfExpandedCells());
 			System.out.println("No of Nodes in Path:" + AWithSmallerG.getPath().size());
 			System.out.println("Path:");
@@ -164,7 +167,10 @@ public class Test {
 			while (IPSG.hasNext()) {
 				System.out.print(IPSG.next().getXY() + "->");
 			}
-			System.out.println();*/
+			System.out.println();
+			System.out.println("----------------------------------------------------------------------------------------");
+/*----------------------------------------------------------------------------------------------------------------------*/			
+
 	}
 
 }
