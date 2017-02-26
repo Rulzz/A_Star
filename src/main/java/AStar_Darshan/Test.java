@@ -50,7 +50,7 @@ public class Test {
 			System.out.println("Start X : " + start.getxCoordinate() + " Y:" + start.getyCoordinate());
 			System.out.println("Goal X : " + goal.getxCoordinate() + " Y:" + goal.getyCoordinate());
 
-			AStar A = new AStar(maze, start, goal);
+			RepeatedForwardAStar A = new RepeatedForwardAStar(maze, start, goal);
 
 			A.executeAStar();
 			ArrayList<Cell> path = A.getPath();

@@ -15,7 +15,7 @@ import A_Star_Algo.Grid;
  * @author darsh
  *
  */
-public class AStar {
+public class RepeatedForwardAStar {
 
 	/**
 	 * 
@@ -45,11 +45,11 @@ public class AStar {
 		}
 	};
 
-	public AStar() {
+	public RepeatedForwardAStar() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AStar(Cell[][] maze, Cell start, Cell goal) {
+	public RepeatedForwardAStar(Cell[][] maze, Cell start, Cell goal) {
 		this.maze = maze;
 		this.start = start;
 		this.goal = goal;

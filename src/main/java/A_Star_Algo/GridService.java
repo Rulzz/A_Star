@@ -2,7 +2,7 @@ package A_Star_Algo;
 
 import java.util.ArrayList;
 
-import AStar_Darshan.AStar;
+import AStar_Darshan.RepeatedForwardAStar;
 import AStar_Darshan.AdaptiveAStar;
 import AStar_Darshan.MazeCreator;
 
@@ -70,7 +70,7 @@ public class GridService {
 		start = maze[startX][startY];
 		goal = maze[goalX][goalY];
 		
-		AStar repeatedForwardAStar = new AStar(maze, start, goal);
+		RepeatedForwardAStar repeatedForwardAStar = new RepeatedForwardAStar(maze, start, goal);
 		
 		repeatedForwardAStar.executeAStar();
 
