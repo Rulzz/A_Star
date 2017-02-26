@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
+
+import com.binaryHeap.MinBinaryHeap;
+import com.binaryHeap.PriorityQueue;
 
 import A_Star_Algo.Cell;
 import A_Star_Algo.GridParameters;
@@ -24,17 +26,19 @@ public class AStar {
 	private int counter = 0;
 	private int numOfExpandedCells = 0;
 	
+	
 	public AStar() {
 		// TODO Auto-generated constructor stub
-		openPQueue = new PriorityQueue<Cell>(cellComparator);
+//		openPQueue = new PriorityQueue<Cell>(cellComparator);
+		openPQueue = new MinBinaryHeap<Cell>(cellComparator);
 		closedList = new LinkedList<Cell>();
 		path = new ArrayList<Cell>();
 	}
 	private Comparator<Cell> cellComparator = new Comparator<Cell>() {
 		@Override
 		public int compare(Cell a, Cell b) {
-			if (a.getfValue() - b.getfValue() == 0)
-				return a.getgValue() - a.getgValue();
+			if ((a.getfValue() - b.getfValue()) == 0)
+				return a.getgValue() - b.getgValue();
 			else
 				return a.getfValue() - b.getfValue();
 		}
@@ -70,7 +74,7 @@ public class AStar {
 		closedList.clear();
 		path.clear();
 		
-		openPQueue.offer(start);
+		openPQueue.add(start);
 		
 		if (!openPQueue.isEmpty()) {
 			findPath();
