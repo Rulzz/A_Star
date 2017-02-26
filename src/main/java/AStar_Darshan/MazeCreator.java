@@ -79,22 +79,32 @@ public class MazeCreator {
 		}
 	}
 	
-	public Cell[][] getMazeCopy(Cell[][] maze, boolean copyObstables, boolean copyHeuristics) {
+	public Cell[][] getMazeCopy(Cell[][] origMaze, boolean copyObstables, boolean copyHeuristics) {
 		
-		Cell[][] copy = new Cell[maze.length][maze[0].length];
-		for (int i = 0; i < maze.length; i++) {
-			for (int j = 0; j < maze[0].length; j++) {
-				copy[i][j].children = new TreeSet<Cell>(cellComparator);
-				setChildren(copy[i][j], copy);
+		int row = origMaze.length;
+		int column = origMaze[0].length;
+		Cell[][] copy = new Cell[row][column];
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				copy[i][j] = new Cell(i, j);
 				if(copyObstables) {
-					copy[i][j].setObstacle(copy[i][j].isObstacle());
+					copy[i][j].setObstacle(origMaze[i][j].isObstacle());
 				}
 				if(copyHeuristics) {
-					copy[i][j].sethValue(copy[i][j].gethValue());
+					copy[i][j].sethValue(origMaze[i][j].gethValue());
 				}
+				if(origMaze[i][j].isStart()) {
+					copy[i][j].setStart(true);
+				}
+				if(origMaze[i][j].isEnd()) {
+					copy[i][j].setEnd(true);
+				}
+				
+				String XY = Integer.toString(i)+Integer.toString(j);
+				copy[i][j].setXY(XY);
 			}
 		}
-		
+		generateChildren(copy);
 		return copy;
 	}
 
@@ -262,7 +272,7 @@ public class MazeCreator {
 				}
 				
 				xy.setHeuristic(Math.abs(gridParam.getxGoal()-x)+Math.abs(gridParam.getyGoal()-y));
-				
+				xy.sethValue(Math.abs(gridParam.getxGoal()-x)+Math.abs(gridParam.getyGoal()-y));
 				maze[x][y] = xy;
 			}
 		}
@@ -319,6 +329,19 @@ public class MazeCreator {
 		for(Cell child : node.getChildrenList()) {
 			if(!child.isVisited()) {
 				generateBlocks(child.getxCoordinate(), child.getyCoordinate(), child, param);
+			}
+		}
+	}
+
+	public void setXYandH(Cell[][] mazeXY, GridParameters gridParam) {
+		int rows = mazeXY.length;
+		int cols = mazeXY[0].length;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				String XY = Integer.toString(i)+Integer.toString(j);
+				mazeXY[i][j].setXY(XY);
+				mazeXY[i][j].setHeuristic(Math.abs(gridParam.getxGoal()-i)+Math.abs(gridParam.getyGoal()-j));
+				mazeXY[i][j].sethValue(Math.abs(gridParam.getxGoal()-i)+Math.abs(gridParam.getyGoal()-j));
 			}
 		}
 	}

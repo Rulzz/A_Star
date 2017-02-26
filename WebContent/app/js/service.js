@@ -50,6 +50,26 @@
 				        		}})
     	};
     	
+    	this.getAdaptiveAStar = function (customizedParam) {
+    		return $http.post('http://localhost:8080/A_Star_Algo/rest/GridResource/adaptiveAStar', customizedParam, {headers:{
+						            'Access-Control-Allow-Origin': '*',
+						            'Access-Control-Allow-Headers': 'origin, content-type, accept',
+						            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+						            'contentType': 'application/json; charset=utf-8',
+						            'dataType' : 'json',
+				        		}})
+    	};
+    	
+    	this.solveCreatedAdaptiveAStar = function (ParamAndGrid) {
+    		return $http.post('http://localhost:8080/A_Star_Algo/rest/GridResource/adaptiveAStarCustomized', ParamAndGrid, {headers:{
+						            'Access-Control-Allow-Origin': '*',
+						            'Access-Control-Allow-Headers': 'origin, content-type, accept',
+						            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+						            'contentType': 'application/json; charset=utf-8',
+						            'dataType' : 'json',
+					    		}})
+					};
+    	
     }])
  
 }());

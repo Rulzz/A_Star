@@ -90,7 +90,7 @@ public class GridService {
 	}
 
 	public ArrayList<Grid> solveCustomizedAdaptiveAStar(Grid grid, GridParameters gridParam) {
-		mazeCreator.populateChildren(grid, gridParam);
+		mazeCreator.setXYandH(grid.getMaze(), gridParam);
 		mazeCreator.generateChildren(grid.getMaze());
 		ArrayList<Grid> allGrids = adaptive.solveAdaptiveAStar(grid, gridParam);
 		return allGrids;
