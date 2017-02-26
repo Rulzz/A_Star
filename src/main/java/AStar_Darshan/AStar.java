@@ -38,7 +38,7 @@ public class AStar {
 		@Override
 		public int compare(Cell a, Cell b) {
 			if ((a.getfValue() - b.getfValue()) == 0)
-				return a.getgValue() - b.getgValue();
+				return b.getgValue() - a.getgValue();
 			else
 				return a.getfValue() - b.getfValue();
 		}
