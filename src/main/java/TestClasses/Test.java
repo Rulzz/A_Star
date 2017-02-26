@@ -1,7 +1,7 @@
 /**
  * 
  */
-package AStar_Darshan;
+package TestClasses;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,6 +9,9 @@ import java.util.Random;
 
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 
+import AStar_Darshan.MazeCreator;
+import AStar_Darshan.MazeDisplay;
+import AStar_Darshan.RepeatedForwardAStar;
 import A_Star_Algo.Cell;
 import A_Star_Algo.Grid;
 

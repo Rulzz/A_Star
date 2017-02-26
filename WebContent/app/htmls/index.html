@@ -61,11 +61,12 @@
 								    	</div>
 								    	<div ng-if="completeGrid.maze[cell.xCoordinate][cell.yCoordinate].cellStatus!='Block'">
 								    		<div class="content" ng-switch on="cell.direction">
-										    <div ng-switch-when="Right"> <img src="../images/right.png" alt="HTML5 Icon" width="60" height="60"> </div>
-										    <div ng-switch-when="Left">  <img src="../images/left.png" alt="HTML5 Icon" width="60" height="60"> </div>
-										    <div ng-switch-when="Up"> <img src="../images/up.png" alt="HTML5 Icon" width="60" height="60"> </div>
-										    <div ng-switch-when="Down"> <img src="../images/down.png" alt="HTML5 Icon" width="60" height="60"> </div>
-								    	</div>
+											    <div ng-switch-when="Right"> <img src="../images/right.png" alt="HTML5 Icon" width="60" height="60"> </div>
+											    <div ng-switch-when="Left">  <img src="../images/left.png" alt="HTML5 Icon" width="60" height="60"> </div>
+											    <div ng-switch-when="Up"> <img src="../images/up.png" alt="HTML5 Icon" width="60" height="60"> </div>
+											    <div ng-switch-when="Down"> <img src="../images/down.png" alt="HTML5 Icon" width="60" height="60"> </div>
+									    	</div>
+										</div>
 									</div>
 									<div ng-switch-when="Blank"  ng-click = "change(cell)"> <img src="../images/blank.png" alt="HTML5 Icon" width="60" height="60"> </div>
 					          	</td>

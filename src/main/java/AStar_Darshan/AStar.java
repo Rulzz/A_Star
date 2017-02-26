@@ -41,8 +41,9 @@ public class AStar {
 		}
 	};
 	
-	public Cell[][] execute(Cell[][] maze,GridParameters gridParam)
+	public boolean execute(Cell[][] maze,GridParameters gridParam)
 	{
+		boolean isGoalReached = false;
 		counter++;
 		
 		//this.maze = maze;
@@ -74,7 +75,7 @@ public class AStar {
 		if (openPQueue.isEmpty()) {
 			path.clear();
 			System.out.println("Astar says Target is not reachable.");
-			return null;
+			return isGoalReached;
 		}
 		
 		ArrayList<Cell> reverseRoute = TracePath(goal);
@@ -89,7 +90,8 @@ public class AStar {
 			maze[temp.getxCoordinate()][temp.getyCoordinate()].setOnFinalPath(true);
 		}
 		numOfExpandedCells += closedList.size();
-		return maze;
+		isGoalReached = true;
+		return isGoalReached;
 	}
 	
 	private void findPath() {

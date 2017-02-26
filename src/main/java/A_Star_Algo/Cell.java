@@ -155,13 +155,13 @@ public class Cell {
 		this.children = children;
 	}
 	
-	public void setChildren(Grid grid, GridParameters param) {
+	public void setChildrenList(Grid grid, GridParameters param) {
 		ArrayList<Cell> neighbors = new ArrayList<>();
 		addIfAdmissible(neighbors, grid, this.getxCoordinate()-1, this.getyCoordinate(), param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate()+1, this.getyCoordinate(), param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate(), this.getyCoordinate()-1, param);
 		addIfAdmissible(neighbors, grid, this.getxCoordinate(), this.getyCoordinate()+1, param);
-		this.setChildrenList(neighbors);
+		this.childrenList = neighbors;
 	}
 	
 	
@@ -237,9 +237,5 @@ public class Cell {
 		return childrenList;
 	}
 
-	public void setChildrenList(ArrayList<Cell> childrenList) {
-		this.childrenList = childrenList;
-	}
-	
 	
 }

@@ -258,7 +258,7 @@ public class MazeCreator {
 		
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
-				grid.getMaze()[x][y].setChildren(grid, param);
+				grid.getMaze()[x][y].setChildrenList(grid, param);
 			}
 		}
 		
@@ -273,7 +273,7 @@ public class MazeCreator {
 	public void populateChildren(Grid grid, GridParameters param) {
 		for(int x=0 ; x<param.getLength(); x++) {
 			for(int y=0 ; y<param.getBreadth(); y++) {
-				grid.getMaze()[x][y].setChildren(grid, param);
+				grid.getMaze()[x][y].setChildrenList(grid, param);
 				grid.getMaze()[x][y].setVisited(false);
 			}
 		}

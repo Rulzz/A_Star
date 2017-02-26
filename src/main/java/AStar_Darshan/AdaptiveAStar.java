@@ -1,17 +1,17 @@
 package AStar_Darshan;
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 
 import A_Star_Algo.Cell;
-import A_Star_Algo.ExecuteAStar;
 import A_Star_Algo.Grid;
 import A_Star_Algo.GridParameters;
 
 public class AdaptiveAStar {
 	
 	MazeCreator mazeCreator = new MazeCreator();
-	ExecuteAStar AStar = new ExecuteAStar();
+	AStar aStar = new AStar();
+	
+	private boolean isAstarExecuted = false;
 	
 	public ArrayList<Grid> solveAdaptiveAStar(Grid grid, GridParameters param) {
 		
@@ -27,23 +27,25 @@ public class AdaptiveAStar {
 		
 		//set heuristic on initial discovered maze
 		
-		PriorityQueue<Cell> openList = new PriorityQueue<>();
+		ArrayList<Cell> openList = new ArrayList<>();
 		openList.add(start);
 		
 		while(!openList.isEmpty()) {
 			boolean isReached =getAdaptiveStep(finalPath, openList, initialMaze, discoveredMaze, param);
-			Grid discoveredGrid = new Grid();
-			discoveredGrid.setMaze(discoveredMaze);
-			discoveredGrid.setGoalReached(isReached);
-			allGrids.add(discoveredGrid);
-			updateDiscoveredMaze(discoveredMaze, param);
+			if(isAstarExecuted) {
+				Grid discoveredGrid = new Grid();
+				discoveredGrid.setMaze(discoveredMaze);
+				discoveredGrid.setGoalReached(isReached);
+				allGrids.add(discoveredGrid);
+				updateDiscoveredMaze(discoveredMaze, param);
+			}
 		}
 		
 		return allGrids;
 	}
 
-	private boolean getAdaptiveStep(ArrayList<Cell> finalPath, PriorityQueue<Cell> openList, Cell[][] initialMaze, Cell[][] discoveredMaze, GridParameters param) {
-		
+	private boolean getAdaptiveStep(ArrayList<Cell> finalPath, ArrayList<Cell> openList, Cell[][] initialMaze, Cell[][] discoveredMaze, GridParameters param) {
+		isAstarExecuted=false;
 		Cell toExpand = getBestCellToExpand(openList);
 		
 		finalPath.add(toExpand);
@@ -52,21 +54,29 @@ public class AdaptiveAStar {
 			return true;
 		}
 		
-		for(Cell child : toExpand.getChildren()) {   //gets all the children including blocks
+		for(Cell child : toExpand.getChildrenList()) {   //gets all the children including blocks
+			child.setParent(toExpand);
 			if(child.isObstacle()) {
 				discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
 			} else {
 				openList.add(child);
 			}
-		}	
-		openList.remove(toExpand);
-		//run Astar on discovered maze
-		GridParameters newStartParam = new GridParameters();
-		newStartParam=param;
-		newStartParam.setxStart(toExpand.getxCoordinate());
-		newStartParam.setyStart(toExpand.getyCoordinate());
+		}
 		
-		return AStar.execute(discoveredMaze, param);
+		if(toExpand.isObstacle()) {
+			//run Astar on discovered maze
+			GridParameters newStartParam = new GridParameters();
+			newStartParam=param;
+			newStartParam.setxStart(toExpand.getParent().getxCoordinate());
+			newStartParam.setyStart(toExpand.getParent().getyCoordinate());
+			isAstarExecuted=true;
+			return aStar.execute(discoveredMaze, param);
+		}
+		
+		toExpand.setOnFinalPath(true);
+		openList.remove(toExpand);
+		
+		return false;
 		
 	}
 
@@ -84,7 +94,7 @@ public class AdaptiveAStar {
 		
 	}
 
-	private Cell getBestCellToExpand(PriorityQueue<Cell> openList) {
+	private Cell getBestCellToExpand(ArrayList<Cell> openList) {
 		int lowestH = Integer.MAX_VALUE;
 		Cell lowestHCell = new Cell();
 		for(Cell cell : openList) {

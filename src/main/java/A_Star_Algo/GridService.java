@@ -88,6 +88,12 @@ public class GridService {
 		
 		return allGrids;
 	}
+
+	public ArrayList<Grid> solveCustomizedAdaptiveAStar(Grid grid, GridParameters gridParam) {
+		mazeCreator.populateChildren(grid, gridParam);
+		ArrayList<Grid> allGrids = adaptive.solveAdaptiveAStar(grid, gridParam);
+		return allGrids;
+	}
 	
 	
 }

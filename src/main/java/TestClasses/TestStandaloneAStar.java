@@ -1,7 +1,10 @@
-package AStar_Darshan;
+package TestClasses;
 
 import java.util.ArrayList;
 
+import AStar_Darshan.AStar;
+import AStar_Darshan.MazeCreator;
+import AStar_Darshan.MazeDisplay;
 import A_Star_Algo.Cell;
 import A_Star_Algo.Grid;
 import A_Star_Algo.GridParameters;
@@ -32,7 +35,7 @@ public class TestStandaloneAStar {
 		System.out.println("------------------------------------------------");
 		
 		AStar aStar = new AStar();
-		maze = aStar.execute(maze, gridParam);
+		aStar.execute(maze, gridParam);
 		ArrayList<Cell> path = aStar.getPath();
 		
 		if(!path.isEmpty())
