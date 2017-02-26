@@ -14,6 +14,7 @@ import AStar_Darshan.MazeDisplay;
 import AStar_Darshan.RepeatedForwardAStar;
 import A_Star_Algo.Cell;
 import A_Star_Algo.Grid;
+import A_Star_Algo.GridParameters;
 
 /**
  * @author darsh
@@ -24,27 +25,24 @@ public class Test {
 	private static final int SIZE = 5;
 
 	public static void main(String[] args) {
-
-			MazeCreator mazeCreator = new MazeCreator(SIZE, SIZE);
-			Cell[][] maze = mazeCreator.getMaze();
-			
-			Random random = new Random();
-			
+		
 			int startX, startY, goalX, goalY;
 			startX = 0; startY = 0; goalX = 4; goalY = 4;
-
+			
+			//Random random = new Random();
 			/*startX = random.nextInt(SIZE);
 			startY = random.nextInt(SIZE);
 			goalX = random.nextInt(SIZE);
 			goalY = random.nextInt(SIZE);*/
+
+			GridParameters gridParam = new GridParameters(SIZE, SIZE, startX, startY, goalX, goalY);
+			MazeCreator mazeCreator = new MazeCreator(gridParam);
+			
+			Cell[][] maze = mazeCreator.getMaze();
 			
 			Cell start, goal;
 			start = maze[startX][startY];
 			goal = maze[goalX][goalY];
-			start.setObstacle(false);
-			goal.setObstacle(false);
-			
-			
 
 			System.out.println("Display Generated Maze:");
 			mazeCreator.display();
@@ -56,6 +54,7 @@ public class Test {
 			RepeatedForwardAStar A = new RepeatedForwardAStar(maze, start, goal);
 
 			A.executeAStar();
+			
 			ArrayList<Cell> path = A.getPath();
 			System.out.println("Maze After AStar Search:");
 		 	MazeDisplay.display(maze, path);

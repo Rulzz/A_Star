@@ -17,7 +17,6 @@ import A_Star_Algo.GridParameters;
 public class AStar {
 
 	private static final int INFINITY = Integer.MAX_VALUE - 100000;
-	private int rows,columns;
 	private Cell start, goal;
 	private PriorityQueue<Cell> openPQueue;
 	private LinkedList<Cell> closedList;
@@ -46,17 +45,21 @@ public class AStar {
 		boolean isGoalReached = false;
 		counter++;
 		
-		//this.maze = maze;
+/*		System.out.println("AStar---------------------------------------");
+		MazeCreator.display(maze);
+		System.out.println("--------------------------------------------");
+*/		
 		start = maze[gridParam.xStart][gridParam.yStart];
 		goal = maze[gridParam.xGoal][gridParam.yGoal];
 		
-		for(int i=0;i<rows;i++)
+		for(int i=0;i<maze.length;i++)
 		{
-			for(int j=0;j<columns;j++)
+			for(int j=0;j<maze[0].length;j++)
 			{
 				maze[i][j].setSearch(0);
 			}
 		}
+		
 		start.setgValue(0);
 		start.setSearch(counter);
 
@@ -98,11 +101,9 @@ public class AStar {
 		while (goal.getgValue() > openPQueue.peek().getgValue()) {
 			Cell currentCell = openPQueue.poll();
 			closedList.add(currentCell);
-
 			for (Cell child : currentCell.children) {
 				if (!child.isObstacle()) {
 					Cell newCell = child;
-
 					if (newCell.getSearch() < counter) {
 						newCell.setgValue(INFINITY);
 						newCell.setSearch(counter);
@@ -122,13 +123,6 @@ public class AStar {
 				return;
 			}
 		}
-		/*System.out.println("OpenQueue:");
-		Iterator<Cell> IQ = openPQueue.iterator();
-		while (IQ.hasNext()) {
-			Cell temp = IQ.next();
-			System.out.print(temp.getXY() + "," + temp.getgValue() + "->");
-		}
-		System.out.println();*/
 	}
 	
 	private ArrayList<Cell> TracePath(Cell goal)
