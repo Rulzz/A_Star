@@ -12,6 +12,7 @@ public class AdaptiveAStar {
 	AStar aStar = new AStar();
 	
 	private boolean isGoalReached = false;
+	private boolean goalUnreachable = false;
 	
 	public ArrayList<Grid> solveAdaptiveAStar(Grid grid, GridParameters param) {
 		
@@ -19,83 +20,92 @@ public class AdaptiveAStar {
 		allGrids.add(grid);
 		Cell[][] initialMaze = grid.getMaze();
 		Cell[][] discoveredMaze = mazeCreator.getMazeCopy(initialMaze, false, true);
-		ArrayList<Cell> finalPath = new ArrayList<>();
+		ArrayList<Cell> aStarPath = new ArrayList<>();
+		ArrayList<Cell> finalPath =new ArrayList<Cell>();
 		
 		Cell start = discoveredMaze[param.getxStart()][param.getyStart()];
 		start.setVisited(true);
 		
 		
-		//set heuristic on initial discovered maze
+		Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
+		mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
+		mazeCopy[param.getxStart()][param.getyStart()].setStart(true);
+		aStar.execute(mazeCopy, param);
+		aStarPath.addAll(aStar.getPath());
+		updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
 		
-		ArrayList<Cell> openList = new ArrayList<>();
-		openList.add(start);
-		
-		while(!openList.isEmpty() && !isGoalReached) {
-			getAdaptiveStep(initialMaze, openList, discoveredMaze, param, allGrids);
+		while(!isGoalReached && !goalUnreachable) {
+			getAdaptiveStep(initialMaze, finalPath, discoveredMaze, param, allGrids, aStarPath);
 		}
 		Grid intermediateGrid = new Grid();
-		mazeCreator.setFinalPath(discoveredMaze[param.getxGoal()][param.getyGoal()]);
+		mazeCreator.traceFinalPath(discoveredMaze, aStarPath);
+		mazeCreator.setPathDirection(discoveredMaze, aStarPath);
 		intermediateGrid.setMaze(discoveredMaze);
 		intermediateGrid.setGoalReached(isGoalReached);
 		allGrids.add(intermediateGrid);
 		return allGrids;
 	}
 
-	private void getAdaptiveStep(Cell[][] initialMaze, ArrayList<Cell> openList, Cell[][] discoveredMaze, GridParameters param, ArrayList<Grid> allGrids) {
-		Cell toExpand = getBestCellToExpand(openList);
+	private void getAdaptiveStep(Cell[][] initialMaze, ArrayList<Cell> finalPath, Cell[][] discoveredMaze, GridParameters param, ArrayList<Grid> allGrids, ArrayList<Cell> aStarPath) {
+		System.out.println("--------------------");
+		
+		
+		System.out.println("final path : " + printOpenList(finalPath));
+		System.out.println("AStarPath path : " + printOpenList(aStarPath));
+		Cell toExpand = aStarPath.get(finalPath.size());
+		System.out.println("Expanding cell : " + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 		
 		if (toExpand.getxCoordinate()==param.getxGoal() && toExpand.getyCoordinate()==param.getyGoal()) {
-			openList.clear();
 			System.out.println("GOAL REACHED!");
 			isGoalReached=true;
 			return;
 		}
 		
-		if(toExpand.isObstacle()) {
+		if(initialMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].isObstacle()) {
 			System.out.println("--------------------");
 			System.out.println("BLOCK!! Inside A Star" + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 			Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
 			mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
-			mazeCopy[toExpand.getParent().getxCoordinate()][toExpand.getParent().getyCoordinate()].setStart(true);
+			mazeCopy[aStarPath.get(finalPath.size()-1).getxCoordinate()][aStarPath.get(finalPath.size()-1).getyCoordinate()].setStart(true);
 			boolean isAstarReached = aStar.execute(mazeCopy, getParamCopy(toExpand, param));
+			aStarPath = updateAStarPath(aStarPath, finalPath, aStar.getPath());
+			mazeCreator.traceFinalPath(mazeCopy, aStarPath);
+			mazeCreator.setPathDirection(mazeCopy, aStarPath);
+			finalPath.add(aStarPath.get(finalPath.size()));
 			updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
 			
 			Grid intermediateGrid = new Grid();
 			intermediateGrid.setMaze(mazeCopy);
 			intermediateGrid.setGoalReached(isAstarReached);
 			allGrids.add(intermediateGrid);
+			if(!isAstarReached) {
+				goalUnreachable = true;
+				finalPath=aStarPath;
+			}
 			
 		} else {
-			System.out.println("--------------------");
-			System.out.println("Expanding cell : " + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
+			finalPath.add(toExpand);
 			
 			for(Cell child : toExpand.getChildren()) {
-				
-				if(discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].isVisited()) {
-					continue;
-				}
-				
 				
 				if(initialMaze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
 						discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
 				}
-				child.setParent(toExpand);
-				System.out.println("Added cell to open list : " + child.getxCoordinate() + "," + child.getyCoordinate());
-				if(!openList.contains(child)) {
-					openList.add(child);
-				} else {
-					System.out.println("Already Present");
-				}
-				
 			}
 			discoveredMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].setVisited(true);
 		}
 		
 		
-		System.out.println("Removed cell to open list : " + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
-		openList.remove(toExpand);
-		System.out.println(printOpenList(openList));
+		System.out.println(printOpenList(finalPath));
 		
+	}
+
+	private ArrayList<Cell> updateAStarPath(ArrayList<Cell> oldPath, ArrayList<Cell> finalPath, ArrayList<Cell> newPath) {
+		oldPath.clear();
+		oldPath.addAll(finalPath);
+		oldPath.remove(finalPath.size()-1);
+		oldPath.addAll(newPath);
+		return oldPath;
 	}
 
 	private String printOpenList(ArrayList<Cell> openList) {

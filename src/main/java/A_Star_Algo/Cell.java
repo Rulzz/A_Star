@@ -25,6 +25,7 @@ public class Cell {
 	private int steps;
 	private int stepsTillNow;
 	private int newHeuristic;
+	private String direction="";
 	
 	private static final int C = 200000;
 	
@@ -236,5 +237,12 @@ public class Cell {
 		return childrenList;
 	}
 
-	
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+
 }

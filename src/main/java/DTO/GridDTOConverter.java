@@ -14,7 +14,7 @@ public class GridDTOConverter {
 		CellDTO[][] mazeDto = new CellDTO[maze.length][maze[1].length];
 		for(int i=0; i<maze.length; i++) {
 	        for(int j=0; j<maze[i].length; j++) {
-	        	mazeDto[i][j] = cellDTOConverter.convert(maze[i][j], getDirection(maze[i][j], grid));
+	        	mazeDto[i][j] = cellDTOConverter.convert(maze[i][j]);
 	        }
 	    }
 		
@@ -22,20 +22,6 @@ public class GridDTOConverter {
 		gridDTO.setMaze(mazeDto);
 		gridDTO.setGoalReached(grid.isGoalReached());
 		return gridDTO;
-	}
-	
-private String getDirection(Cell cell, Grid grid) {
-	if(cell.getyCoordinate()-1>0 && grid.getMaze()[cell.getxCoordinate()][cell.getyCoordinate()-1].isOnFinalPath()) {
-		 return CellDTO.Direction.Right.name();
-	} else if(cell.getyCoordinate()+1<grid.getMaze()[1].length && grid.getMaze()[cell.getxCoordinate()][cell.getyCoordinate()+1].isOnFinalPath()) {
-		 return CellDTO.Direction.Left.name();
-	} else if(cell.getxCoordinate()-1>0 && grid.getMaze()[cell.getxCoordinate()-1][cell.getyCoordinate()].isOnFinalPath()) {
-		 return CellDTO.Direction.Down.name();
-	} else if(cell.getxCoordinate()+1<grid.getMaze().length && grid.getMaze()[cell.getxCoordinate()+1][cell.getyCoordinate()].isOnFinalPath()) {
-		 return CellDTO.Direction.Up.name();
-	}
-		
-	return null;
 	}
 
 public Grid convert (GridDTO gridDTO) {

@@ -5,13 +5,13 @@ import java.util.TreeSet;
 import A_Star_Algo.Cell;
 
 public class CellDTOConverter {
-	public CellDTO convert (Cell cell, String direction) { 
+	public CellDTO convert (Cell cell) { 
 		CellDTO cellDTO = new CellDTO();
 		cellDTO.setHeuristic(cell.getHeuristic());
 		cellDTO.setxCoordinate(cell.getxCoordinate());
 		cellDTO.setyCoordinate(cell.getyCoordinate());
 		cellDTO.setCellStatus(setCellStatus(cell));
-		cellDTO.setDirection(direction);
+		cellDTO.setDirection(cell.getDirection().isEmpty()?CellDTO.Direction.Up.name() : cell.getDirection());
 		cellDTO.setSteps(cell.getSteps());
 		cellDTO.setStepsTillNow(cell.getStepsTillNow());
 		return cellDTO;

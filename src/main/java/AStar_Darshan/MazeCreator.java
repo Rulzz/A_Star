@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import A_Star_Algo.Cell;
 import A_Star_Algo.Grid;
 import A_Star_Algo.GridParameters;
+import DTO.CellDTO;
 
 public class MazeCreator {
 	private Cell[][] maze;
@@ -346,12 +347,31 @@ public class MazeCreator {
 		}
 	}
 
-	public void setFinalPath(Cell cell) {
-		cell.setOnFinalPath(true);
-		if(cell.getParent()!=null) {
-			setFinalPath(cell.getParent());
+	public void traceFinalPath(Cell[][] maze, ArrayList<Cell> finalPath) {
+		for(Cell path : finalPath) {
+			maze[path.getxCoordinate()][path.getyCoordinate()].setOnFinalPath(true);
 		}
 		
+	}
+
+	public void setPathDirection(Cell[][] mazeCopy, ArrayList<Cell> finalPath) {
+		for(int i=0 ; i<finalPath.size()-1 ; i++) {
+			mazeCopy[finalPath.get(i).getxCoordinate()][finalPath.get(i).getyCoordinate()].setDirection(setDirection(finalPath.get(i), finalPath.get(i+1)));
+		}
+		
+	}
+
+	private String setDirection(Cell current, Cell next) {
+		if(current.getxCoordinate()<next.getxCoordinate()) {
+			return CellDTO.Direction.Down.name();
+		} else if (current.getxCoordinate()>next.getxCoordinate()) {
+			return CellDTO.Direction.Up.name();
+		} else if (current.getyCoordinate()<next.getyCoordinate()) {
+			return CellDTO.Direction.Right.name();
+		} else if (current.getyCoordinate()>next.getyCoordinate()) {
+			return CellDTO.Direction.Left.name();
+		}
+		return "";
 	}
 	
 }
