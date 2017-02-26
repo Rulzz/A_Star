@@ -12,7 +12,7 @@ import A_Star_Algo.GridParameters;
  * @author darsh
  *
  */
-public class RepeatedForwardAStar {
+public class RFAStar {
 
 	/**
 	 * 
@@ -42,11 +42,11 @@ public class RepeatedForwardAStar {
 		}
 	};*/
 
-	public RepeatedForwardAStar() {
+	public RFAStar() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public RepeatedForwardAStar(Cell[][] maze, Cell start, Cell goal) {
+	public RFAStar(Cell[][] maze, Cell start, Cell goal) {
 		this.maze = maze;
 		this.start = start;
 		this.goal = goal;
@@ -87,7 +87,7 @@ public class RepeatedForwardAStar {
 		}
 		while (!kStart.equalsTo(kGoal)) 
 		{
-			System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
+			//System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
 			
 			gridParam.setxStart(kStart.getxCoordinate());
 			gridParam.setyStart(kStart.getyCoordinate());
@@ -130,7 +130,7 @@ public class RepeatedForwardAStar {
 
 			presumedPath = aStar.getPath();
 
-			MazeCreator.display(kMaze);
+			//MazeCreator.display(kMaze);
 			
 			Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
 			MazeCreator.setStartGoal(kMazeCopy, start, goal);
@@ -139,13 +139,13 @@ public class RepeatedForwardAStar {
 			grid.setMaze(kMazeCopy);
 			grids.add(grid);
 
-			System.out.println("I found Shortest Presumed Unblocked path.");
+			/*System.out.println("I found Shortest Presumed Unblocked path.");
 			Iterator<Cell> FP1 = presumedPath.iterator();
 			while (FP1.hasNext()) {
 				Cell temp = FP1.next();
-				System.out.print(temp.getXY()/* + "," + temp.getgValue() */+ "->");
+				System.out.print(temp.getXY() + "," + temp.getgValue() + "->");
 			}
-			System.out.println();
+			System.out.println();*/
 
 			Iterator<Cell> presumedPathIterator = presumedPath.iterator();
 			while (presumedPathIterator.hasNext()) {

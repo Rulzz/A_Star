@@ -27,6 +27,8 @@ public class AStar {
 	private int numOfExpandedCells = 0;
 	
 	
+	
+	
 	public AStar() {
 		// TODO Auto-generated constructor stub
 //		openPQueue = new PriorityQueue<Cell>(cellComparator);
@@ -34,6 +36,15 @@ public class AStar {
 		closedList = new LinkedList<Cell>();
 		path = new ArrayList<Cell>();
 	}
+	
+	public AStar(Comparator<Cell> outerCellcomparator) {
+		// TODO Auto-generated constructor stub
+//		openPQueue = new PriorityQueue<Cell>(cellComparator);
+		openPQueue = new MinBinaryHeap<Cell>(outerCellcomparator);
+		closedList = new LinkedList<Cell>();
+		path = new ArrayList<Cell>();
+	}
+	
 	private Comparator<Cell> cellComparator = new Comparator<Cell>() {
 		@Override
 		public int compare(Cell a, Cell b) {

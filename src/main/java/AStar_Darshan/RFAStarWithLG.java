@@ -2,171 +2,184 @@ package AStar_Darshan;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
+import java.util.Iterator;
 
 import A_Star_Algo.Cell;
+import A_Star_Algo.Grid;
+import A_Star_Algo.GridParameters;
 
 
-public class AStarWithLargerG {
+public class RFAStarWithLG {
 
-	private static final int INFINITY = Integer.MAX_VALUE - 100000;
-	private int row,column;
+	/**
+	 * 
+	 */
+	private int row, column;
 	private Cell[][] maze;
-	private Cell start;
-	private Cell goal;
-	private PriorityQueue<Cell> openPQueue;
-	private LinkedList<Cell> closedList;
-	private ArrayList<Cell> path;
-	private int counter = 0;
+	private Cell[][] kMaze;
+	private Cell start, kStart;
+	private Cell goal, kGoal;
+	/*private PriorityQueue<Cell> openPQueue;
+	private LinkedList<Cell> closedList;*/
+	private ArrayList<Cell> presumedPath,finalPath;
+	//private int counter = 0;
 	private int numOfExpandedCells = 0;
-	
-	private Neighbours[] neighbours = { new Neighbours(0,-1), new Neighbours(1,0),
-			 new Neighbours(0,1), new Neighbours(-1,0) };
-	public AStarWithLargerG() {
-	}
-	
-	private class Neighbours
-	{
-		private int dx;
-		private int dy;
+	private ArrayList<Grid> grids;
+	private GridParameters gridParam;
+	/*private boolean lastStep = false;
+	private int countGoalReached =0;*/
 
-		public Neighbours(int dx, int dy) {
-			this.dx = dx;
-			this.dy = dy;
-		}
-	}
-	
 	private Comparator<Cell> cellComparator = new Comparator<Cell>() 
 	{
 		@Override
 		public int compare(Cell a, Cell b) 
 		{
-			if((a.getfValueLargerG() - b.getfValueLargerG()) == 0)
-				return a.getgValue() - a.getgValue();
-			else
+			/*if((a.getfValueLargerG() - b.getfValueLargerG()) == 0)
+				return b.getgValue() - a.getgValue();
+			else*/
 				return a.getfValueLargerG() - b.getfValueLargerG();
 		}
 	};
-	
-	public AStarWithLargerG(Cell[][] maze, Cell start, Cell goal)
-	{
+
+	public RFAStarWithLG() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public RFAStarWithLG(Cell[][] maze, Cell start, Cell goal) {
 		this.maze = maze;
 		this.start = start;
 		this.goal = goal;
 		
-		openPQueue = new PriorityQueue<Cell>(cellComparator);
-		closedList = new LinkedList<Cell>();
-		path = new ArrayList<Cell>();
-		
 		row = maze.length;
 		column = maze[0].length;
 		
-		for(int i=0; i<row; i++)
-		{
-			for(int j=0; j<column; j++)
-			{
-				maze[i][j].computeHValue(goal);
+		kMaze = MazeCreator.getCopyWithoutObstacle(maze);
+		MazeCreator.generateChildren(kMaze);
+
+		kStart = kMaze[start.getxCoordinate()][start.getyCoordinate()];
+		kGoal = kMaze[goal.getxCoordinate()][goal.getyCoordinate()];
+		
+		gridParam = new GridParameters(row, column, start.getxCoordinate(), start.getyCoordinate(), goal.getxCoordinate(), goal.getyCoordinate());
+		
+		grids = new ArrayList<Grid>();
+		MazeCreator.setStartGoal(maze, start, goal);
+		Grid grid = new Grid();
+		grid.setMaze(maze);
+		grids.add(grid);
+		
+		finalPath = new ArrayList<Cell>();
+		presumedPath = new ArrayList<Cell>();
+
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				kMaze[i][j].computeHValue(goal);
 			}
 		}
-		
 	}
-	
-	public void executeAStarWithLargerG()
-	{
-		System.out.println("Start:"+start.getXY()+" Goal:"+goal.getXY());
-		while(!start.equalsTo(goal))
+
+	public void executeAStar() {
+		boolean isTargetReachable=false;
+		if(start.isObstacle() == true)
 		{
-			counter++;
-			start.setgValue(0);
-			start.computeHValue(goal);
-			start.setSearch(counter);
+			System.out.println("Final Path is empty means somehow your start point is having obstacle istself. Please set to false everytime.");
+			return;
+		}
+		while (!kStart.equalsTo(kGoal)) 
+		{
+			//System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
 			
-			goal.setgValue(INFINITY);
-			goal.setSearch(counter);
+			gridParam.setxStart(kStart.getxCoordinate());
+			gridParam.setyStart(kStart.getyCoordinate());
+			gridParam.setxGoal(kGoal.getxCoordinate());
+			gridParam.setyGoal(kGoal.getyCoordinate());
 			
-			openPQueue.clear();
-			closedList.clear();
 			
-			openPQueue.offer(start);
-			
-			if(!openPQueue.isEmpty())
+			kStart.computeHValue(goal);
+			for(int i=0;i<kMaze.length;i++)
 			{
-				findPath();
+				for(int j=0;j<kMaze.length;j++)
+				{
+					kMaze[i][j].setgValue(0);
+				}
 			}
 			
-			if(openPQueue.isEmpty())
+			for (Cell child : kStart.children) {
+				if (this.maze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
+					kMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
+				}
+			}
+			
+			AStar aStar = new AStar(cellComparator);
+			isTargetReachable = aStar.execute(kMaze, gridParam);
+			
+			if (isTargetReachable == false) 
 			{
+				Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
+				MazeCreator.setStartGoal(kMazeCopy, start, goal);
+				MazeCreator.setFinalPath(kMazeCopy, getPath());
+				
+				Grid grid = new Grid();
+				grid.setGoalReached(true);
+				grid.setMaze(kMazeCopy);
+				grids.add(grid);
+				finalPath.clear();
 				System.out.println("Target is not reachable.");
 				return;
 			}
+
+			presumedPath = aStar.getPath();
+
+		//	MazeCreator.display(kMaze);
 			
-			ArrayList<Cell> route = TracePath(goal);
-			for(int i=route.size()-1;i>=0;i--)
-				path.add(route.get(i));
-			numOfExpandedCells = numOfExpandedCells + closedList.size();
-			return;
-		}
-	}
-	
-	private void findPath()
-	{
-		while(goal.getgValue() > openPQueue.peek().getgValue())
-		{
-			Cell currentCell = openPQueue.poll();
-			closedList.add(currentCell);
-			
-			for(Neighbours neighbour : neighbours)
-			{
-				int newX= currentCell.getxCoordinate() + neighbour.dx ;
-				int newY= currentCell.getyCoordinate() + neighbour.dy ;
-				
-				if((0<= newX && newX < row) && (0<= newY && newY < column) && (!maze[newX][newY].isObstacle()))
-				{
-					Cell newCell = maze[newX][newY];
-					
-					if(newCell.getSearch() < counter)
-					{
-						newCell.setgValue(INFINITY);
-						newCell.setSearch(counter);
-					}
-					
-					if(newCell.getgValue() > currentCell.getgValue() + 1)
-					{
-						newCell.setgValue(currentCell.getgValue()+1);
-						newCell.parent = currentCell;
-						
-						if(openPQueue.contains(newCell))
-						{
-							openPQueue.remove(newCell);
-						}
-						openPQueue.offer(newCell);
+			Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
+			MazeCreator.setStartGoal(kMazeCopy, start, goal);
+			MazeCreator.setFinalPath(kMazeCopy, presumedPath);
+			Grid grid = new Grid();
+			grid.setMaze(kMazeCopy);
+			grids.add(grid);
+
+			/*System.out.println("I found Shortest Presumed Unblocked path.");
+			Iterator<Cell> FP1 = presumedPath.iterator();
+			while (FP1.hasNext()) {
+				Cell temp = FP1.next();
+				System.out.print(temp.getXY() + "," + temp.getgValue() + "->");
+			}
+			System.out.println();*/
+
+			Iterator<Cell> presumedPathIterator = presumedPath.iterator();
+			while (presumedPathIterator.hasNext()) {
+				Cell temp = presumedPathIterator.next();
+				if (maze[temp.getxCoordinate()][temp.getyCoordinate()].isObstacle()) {
+					finalPath.remove(temp);
+					break;
+				}
+				for (Cell child : temp.children) {
+					if (this.maze[child.getxCoordinate()][child.getyCoordinate()].isObstacle() && !temp.equals(kGoal)) {
+						kMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
 					}
 				}
+				if (!finalPath.contains(temp)) {
+					finalPath.add(temp);
+				}
 			}
-			if(openPQueue.isEmpty())
+			if(finalPath.isEmpty())
 			{
+				System.out.println("Final Path is empty means somehow your start point is having obstacle istself. Please set to false everytime.");
 				return;
 			}
+			kStart = finalPath.get(finalPath.size() - 1);
+			numOfExpandedCells += aStar.getNumOfExpandedCells();
 		}
-	}
-	
-	private ArrayList<Cell> TracePath(Cell goal)
-	{
-		ArrayList<Cell> route = new ArrayList<Cell>();
-		Cell temp = goal;
-		while(temp != start)
-		{
-			route.add(temp);
-			temp = temp.parent;
-		}
-		if(start.equalsTo(temp))
-		{
-			route.add(start);
-			return route;
-		}
-		else
-			return null;
+		
+		Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
+		MazeCreator.setStartGoal(kMazeCopy, start, goal);
+		MazeCreator.setFinalPath(kMazeCopy, getPath());
+		Grid grid = new Grid();
+		grid.setGoalReached(true);
+		grid.setMaze(kMazeCopy);
+		grids.add(grid);
+		
+		System.out.println("I reached the target.");
 	}
 	
 	public Cell[][] getMaze() {
@@ -174,10 +187,18 @@ public class AStarWithLargerG {
 	}
 
 	public ArrayList<Cell> getPath() {
-		return path;
+		return finalPath;
 	}
 
 	public int getNumOfExpandedCells() {
 		return numOfExpandedCells;
+	}
+
+	public ArrayList<Grid> getGrids() {
+		return grids;
+	}
+
+	public void setGrids(ArrayList<Grid> grids) {
+		this.grids = grids;
 	}
 }
