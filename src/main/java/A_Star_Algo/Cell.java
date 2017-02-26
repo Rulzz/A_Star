@@ -1,7 +1,6 @@
 package A_Star_Algo;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.TreeSet;
 
 public class Cell {
