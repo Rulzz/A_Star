@@ -34,6 +34,7 @@ public class AdaptiveAStar {
 			getAdaptiveStep(initialMaze, openList, discoveredMaze, param, allGrids);
 		}
 		Grid intermediateGrid = new Grid();
+		mazeCreator.setFinalPath(discoveredMaze[param.getxGoal()][param.getyGoal()]);
 		intermediateGrid.setMaze(discoveredMaze);
 		intermediateGrid.setGoalReached(isGoalReached);
 		allGrids.add(intermediateGrid);
@@ -55,7 +56,7 @@ public class AdaptiveAStar {
 			System.out.println("BLOCK!! Inside A Star" + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 			Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
 			mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
-			mazeCopy[toExpand.getxCoordinate()][toExpand.getyCoordinate()].setEnd(true);
+			mazeCopy[toExpand.getParent().getxCoordinate()][toExpand.getParent().getyCoordinate()].setStart(true);
 			boolean isAstarReached = aStar.execute(mazeCopy, getParamCopy(toExpand, param));
 			updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
 			
@@ -80,16 +81,29 @@ public class AdaptiveAStar {
 				}
 				child.setParent(toExpand);
 				System.out.println("Added cell to open list : " + child.getxCoordinate() + "," + child.getyCoordinate());
-				openList.add(child);
+				if(!openList.contains(child)) {
+					openList.add(child);
+				} else {
+					System.out.println("Already Present");
+				}
+				
 			}
-			discoveredMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].setOnFinalPath(true);
 			discoveredMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].setVisited(true);
 		}
 		
 		
 		System.out.println("Removed cell to open list : " + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 		openList.remove(toExpand);
+		System.out.println(printOpenList(openList));
 		
+	}
+
+	private String printOpenList(ArrayList<Cell> openList) {
+		String openListString = "";
+		for(Cell cell : openList) {
+			openListString = openListString + " " + cell.getxCoordinate() + "," + cell.getyCoordinate() + ";";
+		}
+		return openListString;
 	}
 
 	private GridParameters getParamCopy(Cell toExpand, GridParameters param) {

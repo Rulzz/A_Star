@@ -346,6 +346,12 @@ public class MazeCreator {
 		}
 	}
 
-	
+	public void setFinalPath(Cell cell) {
+		cell.setOnFinalPath(true);
+		if(cell.getParent()!=null) {
+			setFinalPath(cell.getParent());
+		}
+		
+	}
 	
 }
