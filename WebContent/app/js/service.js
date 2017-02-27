@@ -69,6 +69,17 @@
 						            'dataType' : 'json',
 					    		}})
 					};
+		this.solveCreatedRFAStar = function (ParamAndGrid) {
+			return $http.post('http://localhost:8080/A_Star_Algo/rest/GridResource/RFAStarCustomized', ParamAndGrid, {headers:{
+									'Access-Control-Allow-Origin': '*',
+									'Access-Control-Allow-Headers': 'origin, content-type, accept',
+									'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+									'contentType': 'application/json; charset=utf-8',
+									'dataType' : 'json',
+								 }})
+					};
+
+
     	
     }])
  

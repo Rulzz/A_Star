@@ -113,6 +113,20 @@
 		
     	}
     	
+    	$scope.solveCreatedRFAStar = function() {
+    		$scope.gridList = null;
+			$scope.gridEditable=false;
+			var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+			GridLayoutService.solveCreatedRFAStar(customizedParam+ '|' + angular.toJson($scope.grid)) .then(function (response) {
+				$scope.gridList = response.data;
+                $scope.grid = $scope.gridList[0];
+                $scope.completeGrid = $scope.gridList[0];
+                $scope.gridIndex=0;
+            }, function (error) {
+            	console.log('Unable to load default data: ' + error.message);
+            });	
+    	}
+    	
     	
     	$scope.solveAdaptiveAStar = function() {
 			$scope.grid = null;
