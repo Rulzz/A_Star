@@ -124,7 +124,7 @@ public class GridService {
 		start = maze[gridParam.xStart][gridParam.yStart];
 		goal = maze[gridParam.xGoal][gridParam.yGoal];
 		
-		System.out.println("Caalling LG.");
+		//System.out.println("Caalling LG.");
 		RFAStarWithLG rfAStarWithLG = new RFAStarWithLG(maze, start, goal);
 		rfAStarWithLG.executeAStar();
 		

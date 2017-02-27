@@ -75,7 +75,7 @@ public class RFAStar {
 		}
 		while (!kStart.equalsTo(kGoal)) 
 		{
-			System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
+			//System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
 			
 			gridParam.setxStart(kStart.getxCoordinate());
 			gridParam.setyStart(kStart.getyCoordinate());

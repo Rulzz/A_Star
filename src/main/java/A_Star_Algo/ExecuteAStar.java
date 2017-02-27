@@ -32,7 +32,7 @@ public class ExecuteAStar {
 	private static void setFinalPath(Cell cell) {
 		cell.setOnFinalPath(true);
 		if(cell.getParent()!=null) {
-			System.out.println("final Path of : " + cell.getxCoordinate() + "," + cell.getyCoordinate()); 
+			//System.out.println("final Path of : " + cell.getxCoordinate() + "," + cell.getyCoordinate()); 
 			setFinalPath(cell.getParent());
 		}
 		
@@ -51,7 +51,7 @@ public class ExecuteAStar {
 				break;
 			}
 			
-			System.out.println("Expanded : " + currentNode.getxCoordinate() + "," + currentNode.getyCoordinate()); 
+			//System.out.println("Expanded : " + currentNode.getxCoordinate() + "," + currentNode.getyCoordinate()); 
 			currentNode.setVisited(true);
 			currentNode.setStepsTillNow(stepsTillNow);
 			addToEstimates(estimateMap, currentNode);
