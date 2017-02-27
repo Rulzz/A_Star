@@ -91,7 +91,7 @@
 					            	console.log('Unable to load default data: ' + error.message);
 					            });	
 		}
-    	$scope.getRepeatedAStar = function() {
+    	$scope.getRFAStar = function() {
 			$scope.grid = null;
 			$scope.gridList = null;
 			$scope.gridEditable=false;
@@ -102,7 +102,7 @@
             $scope.gridIndex=0;*/
 			
 			var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
-			GridLayoutService.getRepeatedAStar(customizedParam) .then(function (response) {
+			GridLayoutService.getRFAStar(customizedParam) .then(function (response) {
                 $scope.gridList = response.data;
                 $scope.grid = $scope.gridList[0];
                 $scope.completeGrid = $scope.gridList[0];
@@ -158,5 +158,74 @@
             });	
     	}
     	
+    	$scope.solveRFAStarWithLG = function() {
+			$scope.grid = null;
+			$scope.gridList = null;
+			$scope.gridEditable=false;
+			
+			/*$scope.gridList = $scope.gridListtest;
+            $scope.grid = $scope.gridList[0];
+            $scope.completeGrid = $scope.gridList[0];
+            $scope.gridIndex=0;*/
+			
+			var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+			GridLayoutService.solveRFAStarWithLG(customizedParam) .then(function (response) {
+                $scope.gridList = response.data;
+                $scope.grid = $scope.gridList[0];
+                $scope.completeGrid = $scope.gridList[0];
+                $scope.gridIndex=0;
+            }, function (error) {
+            	console.log('Unable to load default data: ' + error.message);
+            });
+    	}
+    	
+    	$scope.solveCustomizedRFAStarWithLG = function() {
+    		$scope.gridList = null;
+			$scope.gridEditable=false;
+			var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+			GridLayoutService.solveCustomizedRFAStarWithLG(customizedParam+ '|' + angular.toJson($scope.grid)) .then(function (response) {
+				$scope.gridList = response.data;
+                $scope.grid = $scope.gridList[0];
+                $scope.completeGrid = $scope.gridList[0];
+                $scope.gridIndex=0;
+            }, function (error) {
+            	console.log('Unable to load default data: ' + error.message);
+            });	
+    	}
+    	
+    	$scope.solveRFAStarWithSG = function() {
+			$scope.grid = null;
+			$scope.gridList = null;
+			$scope.gridEditable=false;
+			
+			/*$scope.gridList = $scope.gridListtest;
+            $scope.grid = $scope.gridList[0];
+            $scope.completeGrid = $scope.gridList[0];
+            $scope.gridIndex=0;*/
+			
+			var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+			GridLayoutService.solveRFAStarWithSG(customizedParam) .then(function (response) {
+                $scope.gridList = response.data;
+                $scope.grid = $scope.gridList[0];
+                $scope.completeGrid = $scope.gridList[0];
+                $scope.gridIndex=0;
+            }, function (error) {
+            	console.log('Unable to load default data: ' + error.message);
+            });
+    	}
+    	
+    	$scope.solveCustomizedRFAStarWithSG = function() {
+    		$scope.gridList = null;
+			$scope.gridEditable=false;
+			var customizedParam = '{"length":' + $scope.length + ',"breadth":' + $scope.breadth + ',"xStart":' + $scope.xStart + ',"yStart":' + $scope.yStart + ',"xGoal":' + $scope.xGoal + ',"yGoal":' + $scope.yGoal + '}';
+			GridLayoutService.solveCustomizedRFAStarWithSG(customizedParam+ '|' + angular.toJson($scope.grid)) .then(function (response) {
+				$scope.gridList = response.data;
+                $scope.grid = $scope.gridList[0];
+                $scope.completeGrid = $scope.gridList[0];
+                $scope.gridIndex=0;
+            }, function (error) {
+            	console.log('Unable to load default data: ' + error.message);
+            });	
+    	}
     }])
 }());

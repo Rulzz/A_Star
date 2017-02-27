@@ -33,12 +33,22 @@
 				   	</div>
 				   	</br>
 				   	<div class="row">
-		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getRepeatedAStar()">Solve for Repeated A Star</button></div>
+		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getRFAStar()">Solve RandomMaze for RF AStar</button></div>
 		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getBasicGrid()">Generate to select Obstacles</button></div>
 				   		<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveCreatedRFAStar()">Solve</button></div>
 		            </div>
 		            <div class="row">
-		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveAdaptiveAStar()">Solve for Adaptive A Star</button></div>
+		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveRFAStarWithLG()">Solve RandomMaze for RF AStar-LG</button></div>
+		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getBasicGrid()">Generate to select Obstacles</button></div>
+				   		<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveCustomizedRFAStarWithLG()">Solve</button></div>
+		            </div>
+		            <div class="row">
+		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveRFAStarWithSG()">Solve RandomMaze for RF AStar-SG</button></div>
+		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getBasicGrid()">Generate to select Obstacles</button></div>
+				   		<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveCustomizedRFAStarWithSG()">Solve</button></div>
+		            </div>
+		            <div class="row">
+		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveAdaptiveAStar()">Solve RandomMaze for Adaptive AStar</button></div>
 		            	<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getBasicGrid()">Generate to select Obstacles</button></div>
 				   		<div class="col-md-2"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="solveCreatedAdaptiveAStar()">Solve</button></div>
 		            </div>
@@ -63,7 +73,7 @@
 					         		 <div ng-switch-when="Start"> <img src="../images/start.png" alt="HTML5 Icon" width="60" height="60"> </div>
 								    <div ng-switch-when="Goal">  <img src="../images/goal.png" alt="HTML5 Icon" width="60" height="60"> </div>
 								    <div ng-switch-when="Block" ng-click = "change(cell)"> <img src="../images/block.png" alt="HTML5 Icon" width="60" height="60"> </div>
-								    <div ng-switch-when="Visited"> <img src="../images/dot.png" alt="HTML5 Icon" width="60" height="60"> </div>
+								    <!-- <div ng-switch-when="Visited"> <img src="../images/dot.png" alt="HTML5 Icon" width="60" height="60"> </div> -->
 								    <div ng-switch-when="FinalPath" ng-attr-id="{{xCoordinate}} , {{yCoordinate}}">
 								    	<div ng-if="completeGrid.maze[cell.xCoordinate][cell.yCoordinate].cellStatus=='Block'">
 								    		<div> <img src="../images/blockVisit.png" alt="HTML5 Icon" width="60" height="60"> </div>

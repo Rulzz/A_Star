@@ -3,6 +3,8 @@ package A_Star_Algo;
 import java.util.ArrayList;
 
 import AStar_Darshan.RFAStar;
+import AStar_Darshan.RFAStarWithLG;
+import AStar_Darshan.RFAStarWithSG;
 import AStar_Darshan.AdaptiveAStar;
 import AStar_Darshan.MazeCreator;
 
@@ -51,15 +53,7 @@ public class GridService {
 		return grid;
 	}
 
-	public ArrayList<Grid> solveRepeatedAStar(GridParameters gridParam) {
-		// TODO Auto-generated method stub
-		//int rows = gridParam.length;
-		//int columns = gridParam.breadth;
-		int startX,startY,goalX,goalY;
-		startX = gridParam.xStart;
-		startY = gridParam.yStart;
-		goalX = gridParam.xGoal;
-		goalY = gridParam.yGoal;
+	public ArrayList<Grid> solveRFAStar(GridParameters gridParam) {
 		Cell[][] maze;
 		Cell start,goal;
 		ArrayList<Grid> grids;
@@ -67,8 +61,8 @@ public class GridService {
 		MazeCreator mazeCreator = new MazeCreator(gridParam);
 		maze = mazeCreator.getMaze();
 
-		start = maze[startX][startY];
-		goal = maze[goalX][goalY];
+		start = maze[gridParam.xStart][gridParam.yStart];
+		goal = maze[gridParam.xGoal][gridParam.yGoal];
 		
 		RFAStar repeatedForwardAStar = new RFAStar(maze, start, goal);
 		
@@ -92,8 +86,88 @@ public class GridService {
 		goal = maze[gridParam.xGoal][gridParam.yGoal];
 		
 		RFAStar repeatedForwardAStar = new RFAStar(maze, start, goal);
+		repeatedForwardAStar.executeAStar();
 		
 		grids = repeatedForwardAStar.getGrids();
+		
+		return grids;
+	}
+	
+	public ArrayList<Grid> solveRFAStarWithLG(GridParameters gridParam) {
+		Cell[][] maze;
+		Cell start,goal;
+		ArrayList<Grid> grids;
+		
+		MazeCreator mazeCreator = new MazeCreator(gridParam);
+		maze = mazeCreator.getMaze();
+
+		start = maze[gridParam.xStart][gridParam.yStart];
+		goal = maze[gridParam.xGoal][gridParam.yGoal];
+		
+		RFAStarWithLG rfAStarWithLG = new RFAStarWithLG(maze, start, goal);
+		rfAStarWithLG.executeAStar();
+
+		grids = rfAStarWithLG.getGrids();
+		
+		return grids;
+	}
+	
+	public ArrayList<Grid> solveCustomizedRFAStarWithLG(Grid grid, GridParameters gridParam) {
+		
+		Cell[][] maze;
+		Cell start,goal;
+		ArrayList<Grid> grids;
+		
+		maze = grid.getMaze();
+		
+		maze = MazeCreator.getCopy(maze, gridParam);
+		start = maze[gridParam.xStart][gridParam.yStart];
+		goal = maze[gridParam.xGoal][gridParam.yGoal];
+		
+		System.out.println("Caalling LG.");
+		RFAStarWithLG rfAStarWithLG = new RFAStarWithLG(maze, start, goal);
+		rfAStarWithLG.executeAStar();
+		
+		grids = rfAStarWithLG.getGrids();
+		
+		return grids;
+	}
+	
+	public ArrayList<Grid> solveRFAStarWithSG(GridParameters gridParam) {
+		Cell[][] maze;
+		Cell start,goal;
+		ArrayList<Grid> grids;
+		
+		MazeCreator mazeCreator = new MazeCreator(gridParam);
+		maze = mazeCreator.getMaze();
+
+		start = maze[gridParam.xStart][gridParam.yStart];
+		goal = maze[gridParam.xGoal][gridParam.yGoal];
+		
+		RFAStarWithSG rfAStarWithSG = new RFAStarWithSG(maze, start, goal);
+		rfAStarWithSG.executeAStar();
+
+		grids = rfAStarWithSG.getGrids();
+		
+		return grids;
+	}
+	
+	public ArrayList<Grid> solveCustomizedRFAStarWithSG(Grid grid, GridParameters gridParam) {
+		
+		Cell[][] maze;
+		Cell start,goal;
+		ArrayList<Grid> grids;
+		
+		maze = grid.getMaze();
+		
+		maze = MazeCreator.getCopy(maze, gridParam);
+		start = maze[gridParam.xStart][gridParam.yStart];
+		goal = maze[gridParam.xGoal][gridParam.yGoal];
+		
+		RFAStarWithSG rfAStarWithSG = new RFAStarWithSG(maze, start, goal);
+		rfAStarWithSG.executeAStar();
+		
+		grids = rfAStarWithSG.getGrids();
 		
 		return grids;
 	}

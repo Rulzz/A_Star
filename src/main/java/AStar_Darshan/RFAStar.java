@@ -22,25 +22,10 @@ public class RFAStar {
 	private Cell[][] kMaze;
 	private Cell start, kStart;
 	private Cell goal, kGoal;
-	/*private PriorityQueue<Cell> openPQueue;
-	private LinkedList<Cell> closedList;*/
 	private ArrayList<Cell> presumedPath,finalPath;
-	//private int counter = 0;
 	private int numOfExpandedCells = 0;
 	private ArrayList<Grid> grids;
 	private GridParameters gridParam;
-	/*private boolean lastStep = false;
-	private int countGoalReached =0;*/
-
-	/*private Comparator<Cell> cellComparator = new Comparator<Cell>() {
-		@Override
-		public int compare(Cell a, Cell b) {
-			if (a.getfValue() - b.getfValue() == 0)
-				return a.getgValue() - a.getgValue();
-			else
-				return a.getfValue() - b.getfValue();
-		}
-	};*/
 
 	public RFAStar() {
 		// TODO Auto-generated constructor stub
@@ -60,13 +45,6 @@ public class RFAStar {
 		kStart = kMaze[start.getxCoordinate()][start.getyCoordinate()];
 		kGoal = kMaze[goal.getxCoordinate()][goal.getyCoordinate()];
 		
-		gridParam = new GridParameters(row, column, start.getxCoordinate(), start.getyCoordinate(), goal.getxCoordinate(), goal.getyCoordinate());
-		
-		grids = new ArrayList<Grid>();
-		MazeCreator.setStartGoal(maze, start, goal);
-		Grid grid = new Grid();
-		grid.setMaze(maze);
-		grids.add(grid);
 		
 		finalPath = new ArrayList<Cell>();
 		presumedPath = new ArrayList<Cell>();
@@ -74,8 +52,18 @@ public class RFAStar {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < column; j++) {
 				kMaze[i][j].computeHValue(goal);
+				maze[i][j].setVisited(false);
 			}
 		}
+		
+		gridParam = new GridParameters(row, column, start.getxCoordinate(), start.getyCoordinate(), goal.getxCoordinate(), goal.getyCoordinate());
+		
+		grids = new ArrayList<Grid>();
+		MazeCreator.setStartGoal(maze, start, goal);
+		Grid grid = new Grid();
+		grid.setMaze(maze);
+		grids.add(grid);
+
 	}
 
 	public void executeAStar() {
@@ -87,7 +75,7 @@ public class RFAStar {
 		}
 		while (!kStart.equalsTo(kGoal)) 
 		{
-			//System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
+			System.out.println("Start:" + kStart.getXY() + " Goal:" + kGoal.getXY());
 			
 			gridParam.setxStart(kStart.getxCoordinate());
 			gridParam.setyStart(kStart.getyCoordinate());

@@ -91,12 +91,30 @@ public class GridResource {
 	}
 	
 	@POST 
-	@Path("/repeatedAStar") 
+	@Path("/RFAStar") 
 	@Produces(MediaType.APPLICATION_JSON)  
-	public Response solveRepeatedAstar(String param) throws JsonGenerationException, JsonMappingException, IOException { 
+	public Response solveRFAstar(String param) throws JsonGenerationException, JsonMappingException, IOException { 
 		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
-		ArrayList<Grid> grid = service.solveRepeatedAStar(gridParam);
+		ArrayList<Grid> grid = service.solveRFAStar(gridParam);
 		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(grid);
+		String jsonInString = mapper.writeValueAsString(gridDTO);
+		return Response.status(200).header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();
+	}
+	
+	@POST 
+	@Path("/RFAStarCustomized") 
+	@Produces(MediaType.APPLICATION_JSON)  
+	public Response solveCustomizedRFAStar(String paramAndGrid) throws JsonGenerationException, JsonMappingException, IOException { 
+		String paramString = paramAndGrid.split("\\|")[0];
+		String gridString = paramAndGrid.split("\\|")[1];
+		GridParameters gridParam = mapper.readValue(paramString, GridParameters.class);
+		GridDTO gridDTOinput = mapper.readValue(gridString, GridDTO.class);
+		ArrayList<Grid> grids = service.solveCustomizedRFAStar(gridDTOConverter.convert(gridDTOinput), gridParam);
+		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(grids);
 		String jsonInString = mapper.writeValueAsString(gridDTO);
 		return Response.status(200).header("Access-Control-Allow-Origin", "*")
 	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")
@@ -139,14 +157,62 @@ public class GridResource {
 	}
 	
 	@POST 
-	@Path("/RFAStarCustomized") 
+	@Path("/RFAStarWithLG") 
 	@Produces(MediaType.APPLICATION_JSON)  
-	public Response solveCustomizedRFAStar(String paramAndGrid) throws JsonGenerationException, JsonMappingException, IOException { 
+	public Response solveRFAStarWithLG(String param) throws JsonGenerationException, JsonMappingException, IOException { 
+		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
+		ArrayList<Grid> grid = service.solveRFAStarWithLG(gridParam);
+		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(grid);
+		String jsonInString = mapper.writeValueAsString(gridDTO);
+		return Response.status(200).header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();
+	}
+	
+	@POST 
+	@Path("/RFAStarWithLGCustomized") 
+	@Produces(MediaType.APPLICATION_JSON)  
+	public Response solveCustomizedRFAStarWithLG(String paramAndGrid) throws JsonGenerationException, JsonMappingException, IOException { 
 		String paramString = paramAndGrid.split("\\|")[0];
 		String gridString = paramAndGrid.split("\\|")[1];
 		GridParameters gridParam = mapper.readValue(paramString, GridParameters.class);
 		GridDTO gridDTOinput = mapper.readValue(gridString, GridDTO.class);
-		ArrayList<Grid> grids = service.solveCustomizedRFAStar(gridDTOConverter.convert(gridDTOinput), gridParam);
+		ArrayList<Grid> grids = service.solveCustomizedRFAStarWithLG(gridDTOConverter.convert(gridDTOinput), gridParam);
+		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(grids);
+		String jsonInString = mapper.writeValueAsString(gridDTO);
+		return Response.status(200).header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();
+	}
+	
+	@POST 
+	@Path("/RFAStarWithSG") 
+	@Produces(MediaType.APPLICATION_JSON)  
+	public Response solveRFAStarWithSG(String param) throws JsonGenerationException, JsonMappingException, IOException { 
+		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
+		ArrayList<Grid> grid = service.solveRFAStarWithSG(gridParam);
+		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(grid);
+		String jsonInString = mapper.writeValueAsString(gridDTO);
+		return Response.status(200).header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600").entity(jsonInString).build();
+	}
+	
+	@POST 
+	@Path("/RFAStarWithSGCustomized") 
+	@Produces(MediaType.APPLICATION_JSON)  
+	public Response solveCustomizedRFAStarWithSG(String paramAndGrid) throws JsonGenerationException, JsonMappingException, IOException { 
+		String paramString = paramAndGrid.split("\\|")[0];
+		String gridString = paramAndGrid.split("\\|")[1];
+		GridParameters gridParam = mapper.readValue(paramString, GridParameters.class);
+		GridDTO gridDTOinput = mapper.readValue(gridString, GridDTO.class);
+		ArrayList<Grid> grids = service.solveCustomizedRFAStarWithSG(gridDTOConverter.convert(gridDTOinput), gridParam);
 		ArrayList<GridDTO> gridDTO = gridDTOConverter.convert(grids);
 		String jsonInString = mapper.writeValueAsString(gridDTO);
 		return Response.status(200).header("Access-Control-Allow-Origin", "*")

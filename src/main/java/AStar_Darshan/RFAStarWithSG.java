@@ -37,7 +37,7 @@ public class RFAStarWithSG {
 			/*if((a.getfValueLargerG() - b.getfValueLargerG()) == 0)
 				return b.getgValue() - a.getgValue();
 			else*/
-				return a.getfValueLargerG() - b.getfValueLargerG();
+				return a.getfValueSmallerG() - b.getfValueSmallerG();
 		}
 	};
 
@@ -170,11 +170,11 @@ public class RFAStarWithSG {
 			kStart = finalPath.get(finalPath.size() - 1);
 			numOfExpandedCells += aStar.getNumOfExpandedCells();
 			
-			LinkedList<Cell> closedList = aStar.getClosedList();
+			/*LinkedList<Cell> closedList = aStar.getClosedList();
 			for(Cell c:presumedPath)
 			{
 				c.setHnew(kGoal);
-			}
+			}*/
 		}
 		
 		Cell[][] kMazeCopy = MazeCreator.getCopy(kMaze);
