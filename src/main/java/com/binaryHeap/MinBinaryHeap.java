@@ -113,16 +113,10 @@ public class MinBinaryHeap<T> implements PriorityQueue<T> {
 		
 		T object = binaryTree[index];
 		
-		if(parent == 0)
-		{
-			poll();
-			return object;
-		}
-		
 		binaryTree[index]=binaryTree[size];
 		binaryTree[size] = null;
 		size--;
-
+		
 		if(comparator.compare(binaryTree[index],binaryTree[parent]) < 0)
 			moveUp(index);
 		else
@@ -130,16 +124,16 @@ public class MinBinaryHeap<T> implements PriorityQueue<T> {
 		return object;
 	}
 
-	@SuppressWarnings("unused")
 	protected int indexOf(T object)
 	{
-		
 		if(object != null)
 		{
 			for(int i=1;i<size;i++)
 			{
-				if(object.equals(binaryTree[i]));
+				if(object.equals(binaryTree[i]))
+				{
 					return i;
+				}
 			}
 		}
 		return -1;
