@@ -53,8 +53,8 @@ public class GridService {
 
 	public ArrayList<Grid> solveRepeatedAStar(GridParameters gridParam) {
 		// TODO Auto-generated method stub
-		int rows = gridParam.length;
-		int columns = gridParam.breadth;
+		//int rows = gridParam.length;
+		//int columns = gridParam.breadth;
 		int startX,startY,goalX,goalY;
 		startX = gridParam.xStart;
 		startY = gridParam.yStart;
@@ -79,6 +79,25 @@ public class GridService {
 		return grids;
 	}
 	
+	public ArrayList<Grid> solveCustomizedRFAStar(Grid grid, GridParameters gridParam) {
+		
+		Cell[][] maze;
+		Cell start,goal;
+		ArrayList<Grid> grids;
+		
+		maze = grid.getMaze();
+		
+		maze = MazeCreator.getCopy(maze, gridParam);
+		start = maze[gridParam.xStart][gridParam.yStart];
+		goal = maze[gridParam.xGoal][gridParam.yGoal];
+		
+		RFAStar repeatedForwardAStar = new RFAStar(maze, start, goal);
+		
+		grids = repeatedForwardAStar.getGrids();
+		
+		return grids;
+	}
+	
 	public ArrayList<Grid> solveAdaptiveAStar(GridParameters gridParam) {
 		
 		MazeCreator mazeCreator = new MazeCreator();
@@ -95,6 +114,8 @@ public class GridService {
 		ArrayList<Grid> allGrids = adaptive.solveAdaptiveAStar(grid, gridParam);
 		return allGrids;
 	}
+	
+	
 	
 	
 }

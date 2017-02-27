@@ -190,6 +190,21 @@ public class MazeCreator {
 		return newMaze;
 	}
 	
+	public static Cell[][] getCopy(Cell[][] maze,GridParameters gridParam) {
+		int rows = maze.length;
+		int cols = maze[0].length;
+
+		Cell[][] newMaze = new Cell[rows][cols];
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				newMaze[i][j] = new Cell(i, j);
+				newMaze[i][j].setObstacle(maze[i][j].isObstacle());
+			}
+		}
+		generateChildren(newMaze);
+		return newMaze;
+	}
 
 	public static Cell[][] getCopyWithoutObstacle(Cell[][] maze) {
 		int row = maze.length;
