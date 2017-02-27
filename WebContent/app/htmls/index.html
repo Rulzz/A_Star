@@ -70,24 +70,24 @@
 					         <td ng-repeat="cell in row">
 					         <div ng-switch on="cell.cellStatus">
 					         
-					         		 <div ng-switch-when="Start"> <img src="../images/start.png" alt="HTML5 Icon" width="60" height="60"> </div>
-								    <div ng-switch-when="Goal">  <img src="../images/goal.png" alt="HTML5 Icon" width="60" height="60"> </div>
-								    <div ng-switch-when="Block" ng-click = "change(cell)"> <img src="../images/block.png" alt="HTML5 Icon" width="60" height="60"> </div>
-								    <!-- <div ng-switch-when="Visited"> <img src="../images/dot.png" alt="HTML5 Icon" width="60" height="60"> </div> -->
+					         		 <div ng-switch-when="Start"> <img src="../images/Start.png" alt="HTML5 Icon" width="60" height="60"> </div>
+								    <div ng-switch-when="Goal">  <img src="../images/Goal.png" alt="HTML5 Icon" width="60" height="60"> </div>
+								    <div ng-switch-when="Block" ng-click = "change(cell)"> <img src="../images/Block.png" alt="HTML5 Icon" width="60" height="60"> </div>
+								    <div ng-switch-when="Visited"> <img src="../images/Visited.png" alt="HTML5 Icon" width="60" height="60"> </div>
 								    <div ng-switch-when="FinalPath" ng-attr-id="{{xCoordinate}} , {{yCoordinate}}">
 								    	<div ng-if="completeGrid.maze[cell.xCoordinate][cell.yCoordinate].cellStatus=='Block'">
-								    		<div> <img src="../images/blockVisit.png" alt="HTML5 Icon" width="60" height="60"> </div>
+								    		<div> <img src="../images/BlockVisit.png" alt="HTML5 Icon" width="60" height="60"> </div>
 								    	</div>
 								    	<div ng-if="completeGrid.maze[cell.xCoordinate][cell.yCoordinate].cellStatus!='Block'">
 								    		<div class="content" ng-switch on="cell.direction">
-											    <div ng-switch-when="Right"> <img src="../images/right.png" alt="HTML5 Icon" width="60" height="60"> </div>
-											    <div ng-switch-when="Left">  <img src="../images/left.png" alt="HTML5 Icon" width="60" height="60"> </div>
-											    <div ng-switch-when="Up"> <img src="../images/up.png" alt="HTML5 Icon" width="60" height="60"> </div>
-											    <div ng-switch-when="Down"> <img src="../images/down.png" alt="HTML5 Icon" width="60" height="60"> </div>
+											    <div ng-switch-when="Right"> <img src="../images/Right.png" alt="HTML5 Icon" width="60" height="60"> </div>
+											    <div ng-switch-when="Left">  <img src="../images/Left.png" alt="HTML5 Icon" width="60" height="60"> </div>
+											    <div ng-switch-when="Up"> <img src="../images/Up.png" alt="HTML5 Icon" width="60" height="60"> </div>
+											    <div ng-switch-when="Down"> <img src="../images/Down.png" alt="HTML5 Icon" width="60" height="60"> </div>
 									    	</div>
 										</div>
 									</div>
-									<div ng-switch-when="Blank"  ng-click = "change(cell)"> <img src="../images/blank.png" alt="HTML5 Icon" width="60" height="60"> </div>
+									<div ng-switch-when="Blank"  ng-click = "change(cell)"> <img src="../images/Blank.png" alt="HTML5 Icon" width="60" height="60"> </div>
 								</div>
 					          	</td>
 					      	</tr>
