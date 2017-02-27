@@ -60,16 +60,16 @@ public class AStar {
 		boolean isGoalReached = false;
 		counter++;
 		
-/*		System.out.println("AStar---------------------------------------");
+		/*System.out.println("AStar---------------------------------------");
 		MazeCreator.display(maze);
-		System.out.println("--------------------------------------------");
-*/		
+		System.out.println("--------------------------------------------");*/
+		
 		start = maze[gridParam.xStart][gridParam.yStart];
 		goal = maze[gridParam.xGoal][gridParam.yGoal];
 		MazeCreator creator = new MazeCreator();
 		creator.printMaze(maze);
-		System.out.println("A STAR Start cell : " + start.getxCoordinate() + "," + start.getyCoordinate());
-		System.out.println("A GOAL Start cell : " + goal.getxCoordinate() + "," + goal.getyCoordinate());
+		System.out.println("A STAR Start cell : " + start.getXY());
+		System.out.println("A GOAL Start cell : " + goal.getXY());
 		for(int i=0;i<maze.length;i++)
 		{
 			for(int j=0;j<maze[0].length;j++)
@@ -134,7 +134,7 @@ public class AStar {
 						if (openPQueue.contains(newCell)) {
 							openPQueue.remove(newCell);
 						}
-						openPQueue.add(newCell);
+						openPQueue.add(newCell);			
 					}
 				}
 			}
