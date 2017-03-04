@@ -8,13 +8,13 @@ import A_Star_Algo.Grid;
 
 public class GridDTOConverter {
 	CellDTOConverter cellDTOConverter = new CellDTOConverter();
-	public GridDTO convert (Grid grid) {
+	public GridDTO convert (Grid grid, Grid original) {
 		
 		Cell[][] maze = grid.getMaze();
 		CellDTO[][] mazeDto = new CellDTO[maze.length][maze[1].length];
 		for(int i=0; i<maze.length; i++) {
 	        for(int j=0; j<maze[i].length; j++) {
-	        	mazeDto[i][j] = cellDTOConverter.convert(maze[i][j]);
+	        	mazeDto[i][j] = cellDTOConverter.convert(maze[i][j], original.getMaze());
 	        }
 	    }
 		
@@ -42,7 +42,7 @@ public Grid convert (GridDTO gridDTO) {
 public ArrayList<GridDTO> convert(ArrayList<Grid> gridList) {
 		ArrayList<GridDTO> gridListDto = new ArrayList<>();
 		for(Grid grid : gridList) {
-			gridListDto.add(convert(grid));
+			gridListDto.add(convert(grid, gridList.get(0)));
 		}
 		return gridListDto;
 	}

@@ -19,9 +19,13 @@
     	
     	$scope.change = function(cell) {
     		if($scope.gridEditable) {
-    			if(cell.cellStatus=='Blank') {
+    			if(cell.image=='Blank') {
+        			cell.image='Block';
+        			cell.style="{'background-color' : 'black','border' : '1px solid white','height' : '50px','width' : '50px'}";
         			cell.cellStatus='Block';
-        		} else if (cell.cellStatus=='Block') {
+        		} else if (cell.image=='Block') {
+        			cell.image='Blank';
+        			cell.style="{'border' : '1px solid black','height' : '50px','width' : '50px'}";
         			cell.cellStatus='Blank';
         		}
     		}

@@ -30,7 +30,7 @@ public class GridResource {
 	@Produces(MediaType.APPLICATION_JSON) 
 	public Response solveDefaultGrid() throws JsonGenerationException, JsonMappingException, IOException{ 
 		Grid grid = service.solveDefaultGrid();
-		GridDTO gridDTO = gridDTOConverter.convert(grid);
+		GridDTO gridDTO = gridDTOConverter.convert(grid,grid);
 		String jsonInString = mapper.writeValueAsString(gridDTO);
 		
 		return Response.status(200).header("Access-Control-Allow-Origin", "*")
@@ -46,7 +46,7 @@ public class GridResource {
 	public Response solveCustomizedGrid(String param) throws JsonGenerationException, JsonMappingException, IOException { 
 		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
 		Grid grid = service.solveCustomizedGrid(gridParam);
-		GridDTO gridDTO = gridDTOConverter.convert(grid);
+		GridDTO gridDTO = gridDTOConverter.convert(grid,grid);
 		String jsonInString = mapper.writeValueAsString(gridDTO);
 		return Response.status(200).header("Access-Control-Allow-Origin", "*")
 	            .header("Access-Control-Allow-Headers", "origin, content-type, accept")
@@ -61,7 +61,7 @@ public class GridResource {
 	public Response getBasicGrid(String param) throws JsonGenerationException, JsonMappingException, IOException{ 
 		GridParameters gridParam = mapper.readValue(param, GridParameters.class);
 		Grid grid = service.getBlankGrid(gridParam);
-		GridDTO gridDTO = gridDTOConverter.convert(grid);
+		GridDTO gridDTO = gridDTOConverter.convert(grid,grid);
 		String jsonInString = mapper.writeValueAsString(gridDTO);
 		
 		return Response.status(200).header("Access-Control-Allow-Origin", "*")
@@ -80,7 +80,7 @@ public class GridResource {
 		GridParameters gridParam = mapper.readValue(paramString, GridParameters.class);
 		GridDTO gridDTOinput = mapper.readValue(gridString, GridDTO.class);
 		Grid grid = service.solveCreatedMaze(gridDTOConverter.convert(gridDTOinput), gridParam);
-		GridDTO gridDTO = gridDTOConverter.convert(grid);
+		GridDTO gridDTO = gridDTOConverter.convert(grid,grid);
 		String jsonInString = mapper.writeValueAsString(gridDTO);
 		
 		return Response.status(200).header("Access-Control-Allow-Origin", "*")

@@ -49,7 +49,7 @@
 				   		<div class="col-md-2" style="text-align: center;"><button class="btn btn-primary" class="col-md-4"  ng-disabled="!form.$dirty" ng-click="getLastStep()">Finish</button></div>
 		            </div>
 		            <hr style="margin: 5px;">
-				 </form>  	
+				 </form>
 				
 	       </div>
 	       </br></br>
@@ -60,13 +60,12 @@
 						<tbody>
 					      <tr ng-repeat="row in grid.maze">
 					         <td ng-repeat="cell in row">
-					         	 <div ng-click = "change(cell)"> <img src="../images/{{cell.image}}.png"  width="60" height="60"> </div>
+					         	 <div ng-click = "change(cell)" ng-style="{{cell.style}}"> &nbsp; </div>
 							 </td>
 					      	</tr>
 				      	</tbody>
 			    	</table>
-			</div>
-	       
+			</div>	       
 		</div>
 	</body>
 </html>

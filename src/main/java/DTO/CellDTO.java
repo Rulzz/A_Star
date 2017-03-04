@@ -9,6 +9,9 @@ public class CellDTO {
 	private int steps;
 	private int stepsTillNow;
 	private String direction;
+	private String style;
+	private String image;
+	
 	public int getxCoordinate() {
 		return xCoordinate;
 	}
@@ -54,6 +57,20 @@ public class CellDTO {
 	}
 	public void setStepsTillNow(int stepsTillNow) {
 		this.stepsTillNow = stepsTillNow;
+	}
+	
+
+	public String getStyle() {
+		return style;
+	}
+	public void setStyle(String style) {
+		this.style = style;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 
