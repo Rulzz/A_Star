@@ -22,14 +22,14 @@ public class CellDTOConverter {
 			return "Start";
 		} else if(cell.isEnd()) {
 			return "Goal";
-		} else if(cell.isObstacle()) {
-			return "Block";
 		} else if(cell.isOnFinalPath()) {
 			if(originalMaze[cell.getxCoordinate()][cell.getyCoordinate()].isObstacle()) {
 				return "BlockVisit";
 			} else {
 				return cell.getDirection().isEmpty()?CellDTO.Direction.Up.name() : cell.getDirection();
 			}
+		} else if(cell.isObstacle()) {
+			return "Block";
 		} else if (cell.isVisited()) {
 			return "Visited";
 		} else {
@@ -43,14 +43,14 @@ public class CellDTOConverter {
 			return "{'background-color' : 'blue','border' : '1px solid black','height' : '50px','width' : '50px'}";
 		} else if(cell.isEnd()) {
 			return "{'background-color' : 'red','border' : '1px solid black','height' : '50px','width' : '50px'}";
-		} else if(cell.isObstacle()) {
-			return "{'background-color' : 'black','border' : '1px solid white','height' : '50px','width' : '50px'}";
 		} else if(cell.isOnFinalPath()) {
 			if(originalMaze[cell.getxCoordinate()][cell.getyCoordinate()].isObstacle()) {
 				return "{'background-color' : 'DarkGreen','border' : '1px solid black','height' : '50px','width' : '50px'}";
 			} else {
 				return "{'background-color' : 'LimeGreen','border' : '1px solid black','height' : '50px','width' : '50px'}";
 			}
+		} else if(cell.isObstacle()) {
+			return "{'background-color' : 'black','border' : '1px solid white','height' : '50px','width' : '50px'}";
 		} else if (cell.isVisited()) {
 			return "{'background-color' : 'yellow','border' : '1px solid black','height' : '50px','width' : '50px'}";
 		} else {

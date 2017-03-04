@@ -31,11 +31,14 @@ public class AdaptiveAStar {
 			}
 		}
 		
-		
+		finalPath.add(start);
 		Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
 		mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
 		mazeCopy[param.getxStart()][param.getyStart()].setStart(true);
-		aStar.execute(mazeCopy, param);
+		boolean isAstarReached = aStar.execute(mazeCopy, param);
+		if(!isAstarReached) {
+			goalUnreachable = true;
+		}
 		aStarPath.addAll(aStar.getPath());
 		updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
 		
@@ -43,7 +46,7 @@ public class AdaptiveAStar {
 			getAdaptiveStep(initialMaze, finalPath, discoveredMaze, param, allGrids, aStarPath);
 		}
 		Grid intermediateGrid = new Grid();
-		mazeCreator.traceFinalPath(discoveredMaze, aStarPath);
+		mazeCreator.traceFinalPath(discoveredMaze, finalPath);
 		mazeCreator.setPathDirection(discoveredMaze, aStarPath);
 		intermediateGrid.setMaze(discoveredMaze);
 		intermediateGrid.setGoalReached(isGoalReached);
@@ -52,35 +55,37 @@ public class AdaptiveAStar {
 	}
 
 	private void getAdaptiveStep(Cell[][] initialMaze, ArrayList<Cell> finalPath, Cell[][] discoveredMaze, GridParameters param, ArrayList<Grid> allGrids, ArrayList<Cell> aStarPath) {
-		//System.out.println("--------------------");
+		/*System.out.println("--------------------");
 		
 		
-		//System.out.println("final path : " + printOpenList(finalPath));
-		//System.out.println("AStarPath path : " + printOpenList(aStarPath));
-		  Cell toExpand = aStarPath.get(finalPath.size());
+		System.out.println("final path : " + printOpenList(finalPath));
+		System.out.println("AStarPath path : " + printOpenList(aStarPath));
+		*/
+		Cell toExpand;
+		toExpand = aStarPath.get(finalPath.size());
 		//System.out.println("Expanding cell : " + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 		
 		if (toExpand.getxCoordinate()==param.getxGoal() && toExpand.getyCoordinate()==param.getyGoal()) {
-		//	System.out.println("GOAL REACHED!");
+			//System.out.println("GOAL REACHED!");
 			isGoalReached=true;
 			return;
 		}
 		
-		if(initialMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].isObstacle()) {
-	//		System.out.println("--------------------");
-	//		System.out.println("BLOCK!! Inside A Star" + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
+		if(toExpand.isObstacle()) {
+			//System.out.println("BLOCK!! Inside A Star" + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 			Cell[][] mazeCopy = mazeCreator.getMazeCopy(discoveredMaze, true, true);
 			Cell newStart = aStarPath.get(finalPath.size()-1);
-	//		System.out.println("New Start cell : " + newStart.getxCoordinate() + "," + newStart.getyCoordinate());
+			//System.out.println("New Start cell : " + newStart.getxCoordinate() + "," + newStart.getyCoordinate());
 			mazeCopy[param.getxGoal()][param.getyGoal()].setEnd(true);
 			mazeCopy[newStart.getxCoordinate()][newStart.getyCoordinate()].setStart(true);
+			//mazeCreator.display(mazeCopy);
 			boolean isAstarReached = aStar.execute(mazeCopy, getParamCopy(newStart, param));
-	//		System.out.println("AStarPath path : " + printOpenList( aStar.getPath()));
+			//System.out.println("AStarPath path : " + printOpenList( aStar.getPath()));
 			if(isAstarReached) {
 				aStarPath = updateAStarPath(aStarPath, finalPath, aStar.getPath());
 				mazeCreator.traceFinalPath(mazeCopy, aStarPath);
 				mazeCreator.setPathDirection(mazeCopy, aStarPath);
-				finalPath.add(aStarPath.get(finalPath.size()));
+				//finalPath.add(aStarPath.get(finalPath.size()));
 				updateDiscoveredMaze(mazeCopy, discoveredMaze, param);
 				
 				Grid intermediateGrid = new Grid();
@@ -89,7 +94,7 @@ public class AdaptiveAStar {
 				allGrids.add(intermediateGrid);
 			} else {
 				goalUnreachable = true;
-				finalPath=aStarPath;
+				//finalPath=aStarPath;
 			}
 			
 			
@@ -100,13 +105,15 @@ public class AdaptiveAStar {
 				
 				if(initialMaze[child.getxCoordinate()][child.getyCoordinate()].isObstacle()) {
 						discoveredMaze[child.getxCoordinate()][child.getyCoordinate()].setObstacle(true);
+						child.setObstacle(true);
+						//System.out.println("Discovered blocked cell : " + child.getxCoordinate() + "," + child.getyCoordinate());
 				}
 			}
 			discoveredMaze[toExpand.getxCoordinate()][toExpand.getyCoordinate()].setVisited(true);
 		}
 		
 		
-	//	System.out.println(printOpenList(finalPath));
+		//System.out.println("New final path : " + printOpenList(finalPath)); 
 		
 	}
 

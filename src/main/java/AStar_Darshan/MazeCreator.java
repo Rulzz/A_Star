@@ -338,7 +338,7 @@ public class MazeCreator {
 	}
 	private void generateBlocks(int row, int column, Cell node, GridParameters param) {
 		
-		if( Math.random()<0.1 && !((row==param.getxGoal() && column==param.getyGoal()) || (row==param.getxStart() && column==param.getyStart()))) {
+		if( Math.random()<0.3 && !((row==param.getxGoal() && column==param.getyGoal()) || (row==param.getxStart() && column==param.getyStart()))) {
 			node.setObstacle(true);
 		}
 		node.setVisited(true);
