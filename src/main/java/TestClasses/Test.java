@@ -48,22 +48,26 @@ public class Test {
 			goal = maze[goalX][goalY];
 
 			System.out.println("Display Generated Maze:");
-			mazeCreator.display();
+//			mazeCreator.display();
 			System.out.println("----------------------------------------------------------------------------------------");
 			System.out.println();
 			System.out.println("Start X : " + start.getxCoordinate() + " Y:" + start.getyCoordinate());
 			System.out.println("Goal X : " + goal.getxCoordinate() + " Y:" + goal.getyCoordinate());
 			System.out.println();
 			
+			long timeStart = System.currentTimeMillis();
 			RFAStar rfAStar = new RFAStar(maze, start, goal);
 
 			rfAStar.executeAStar();
+			long timeEnd = System.currentTimeMillis();
 			
 			ArrayList<Cell> path = rfAStar.getPath();
 		//	System.out.println("Maze After AStar Search:");
 		// 	MazeDisplay.display(maze, path);
 
 		 	System.out.println();
+		 	System.out.println("Run time of Repeated Forward A*: " + (timeEnd - timeStart) + "ms");
+		 	System.out.println("Memory: " + rfAStar.getMemory() +"MB");
 		 	System.out.println("Total Grids"+rfAStar.getGrids().size());
 		 	
 			System.out.println();
@@ -80,7 +84,7 @@ public class Test {
 			System.out.print("\n\n\n");
 /*----------------------------------------------------------------------------------------------------------------------*/
 			
-			Cell[][] mazeBack = mazeCreator.getCopy();
+		/*	Cell[][] mazeBack = mazeCreator.getCopy();
 			
 			start = mazeBack[startX][startY];
 			goal = mazeBack[goalX][goalY];
@@ -110,12 +114,12 @@ public class Test {
 				Iterator<Cell> IPBack = path.iterator();
 				while (IPBack.hasNext()) {
 					Cell temp = IPBack.next();
-					System.out.print(temp.getXY()/*+","+temp.getgValue() */+"->");
+					System.out.print(temp.getXY()+","+temp.getgValue() +"->");
 				}
 				System.out.println();
-				System.out.print("\n\n\n");
+				System.out.print("\n\n\n");*/
 /*----------------------------------------------------------------------------------------------------------------------*/
-			System.out.println("----------------------------------------------------------------------------------------");
+			/*System.out.println("----------------------------------------------------------------------------------------");
 			System.out.println("AStarWithLargerG");
 
 			Cell[][] mazeLG = mazeCreator.getCopy();
@@ -141,9 +145,9 @@ public class Test {
 			}
 			System.out.println();
 			System.out.println("----------------------------------------------------------------------------------------");
-			System.out.print("\n\n\n");
+			System.out.print("\n\n\n");*/
 /*----------------------------------------------------------------------------------------------------------------------*/			
-			System.out.println("----------------------------------------------------------------------------------------");
+			/*System.out.println("----------------------------------------------------------------------------------------");
 			System.out.println("AStarWithSmallerG");
 
 			Cell[][] mazeSG = mazeCreator.getCopy();
@@ -170,7 +174,7 @@ public class Test {
 				System.out.print(IPSG.next().getXY() + "->");
 			}
 			System.out.println();
-			System.out.println("----------------------------------------------------------------------------------------");
+			System.out.println("----------------------------------------------------------------------------------------");*/
 /*----------------------------------------------------------------------------------------------------------------------*/			
 			
 			System.out.println("----------------------------------------------------------------------------------------");
@@ -189,12 +193,7 @@ public class Test {
 			
 			AdaptiveAStar adaptiveAStar = new AdaptiveAStar();
 			ArrayList<Grid> grids = adaptiveAStar.solveAdaptiveAStar(grid, gridParamAdaptive);
-			AWithSmallerG.executeAStar();
-		//	ArrayList<Cell> pathSG = AWithSmallerG.getPath();
-
-		//	System.out.println("Maze after A* with Smaller G value.");
-		// 	MazeDisplay.display(mazeSG, pathSG);
-
+			
 			System.out.println();
 			System.out.println("Total Grids"+grids.size());
 		//	System.out.println("No of Expanded Cells:" + AWithSmallerG.getNumOfExpandedCells());

@@ -190,4 +190,11 @@ public class RFAStar {
 	public void setGrids(ArrayList<Grid> grids) {
 		this.grids = grids;
 	}
+	
+	public long getMemory() {
+		Runtime runtime = Runtime.getRuntime();
+		long memory = runtime.totalMemory() - runtime.freeMemory();
+		memory = memory / (1024L * 1024L);
+		return memory;
+	}
 }

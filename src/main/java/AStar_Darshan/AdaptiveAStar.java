@@ -57,7 +57,7 @@ public class AdaptiveAStar {
 		
 		//System.out.println("final path : " + printOpenList(finalPath));
 		//System.out.println("AStarPath path : " + printOpenList(aStarPath));
-		Cell toExpand = aStarPath.get(finalPath.size());
+		  Cell toExpand = aStarPath.get(finalPath.size());
 		//System.out.println("Expanding cell : " + toExpand.getxCoordinate() + "," + toExpand.getyCoordinate());
 		
 		if (toExpand.getxCoordinate()==param.getxGoal() && toExpand.getyCoordinate()==param.getyGoal()) {

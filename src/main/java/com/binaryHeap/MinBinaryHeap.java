@@ -95,6 +95,11 @@ public class MinBinaryHeap<T> implements PriorityQueue<T> {
 		int index = indexOf(object);
 		if(index == -1)
 			return false;
+		else if(index == 1)
+		{
+			poll();
+			return true;
+		}
 		else{
 			removeAt(index);
 			return true;
@@ -110,13 +115,14 @@ public class MinBinaryHeap<T> implements PriorityQueue<T> {
 	protected T removeAt(int index)
 	{
 		int parent = parentIndex(index);
+		if(parent == 0)
+			return poll();
 		
 		T object = binaryTree[index];
 		
 		binaryTree[index]=binaryTree[size];
 		binaryTree[size] = null;
 		size--;
-		
 		if(comparator.compare(binaryTree[index],binaryTree[parent]) < 0)
 			moveUp(index);
 		else
