@@ -13,6 +13,7 @@ public class AdaptiveAStar {
 	
 	private boolean isGoalReached = false;
 	private boolean goalUnreachable = false;
+	public ArrayList<Cell> pathFinal = new ArrayList<>();
 	
 	public ArrayList<Grid> solveAdaptiveAStar(Grid grid, GridParameters param) {
 		
@@ -51,6 +52,7 @@ public class AdaptiveAStar {
 		intermediateGrid.setMaze(discoveredMaze);
 		intermediateGrid.setGoalReached(isGoalReached);
 		allGrids.add(intermediateGrid);
+		pathFinal=finalPath;
 		return allGrids;
 	}
 
@@ -169,5 +171,10 @@ public class AdaptiveAStar {
 		return lowestHCell;
 	}
 	
-	
+	public long getMemory() {
+		Runtime runtime = Runtime.getRuntime();
+		long memory = runtime.totalMemory() - runtime.freeMemory();
+		memory = memory / (1024L * 1024L);
+		return memory;
+	}
 }

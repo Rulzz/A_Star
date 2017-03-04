@@ -191,18 +191,22 @@ public class Test {
 			Grid grid = new Grid();
 			grid.setMaze(mazeAdaptive);
 			
+			long timeStartAdaptive = System.currentTimeMillis();
 			AdaptiveAStar adaptiveAStar = new AdaptiveAStar();
 			ArrayList<Grid> grids = adaptiveAStar.solveAdaptiveAStar(grid, gridParamAdaptive);
+			long timeEndAdaptive = System.currentTimeMillis();
 			
 			System.out.println();
+			System.out.println("Run time of Repeated Forward A*: " + (timeEndAdaptive - timeStartAdaptive) + "ms");
+		 	System.out.println("Memory: " + adaptiveAStar.getMemory() +"MB");
 			System.out.println("Total Grids"+grids.size());
 		//	System.out.println("No of Expanded Cells:" + AWithSmallerG.getNumOfExpandedCells());
 		//	System.out.println("No of Nodes in Path:" + AWithSmallerG.getPath().size());
-			/*System.out.println("Path:");
-			Iterator<Cell> IPSGAD = AWithSmallerG.getPath().iterator();
+			System.out.println("Path:");
+			Iterator<Cell> IPSGAD = adaptiveAStar.pathFinal.iterator();
 			while (IPSGAD.hasNext()) {
 				System.out.print(IPSGAD.next().getXY() + "->");
-			}*/
+			}
 			System.out.println();
 			System.out.println("----------------------------------------------------------------------------------------");
 	}
