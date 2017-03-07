@@ -67,7 +67,7 @@ public class Test {
 
 		 	System.out.println();
 		 	System.out.println("Run time of Repeated Forward A*: " + (timeEnd - timeStart) + "ms");
-		 	System.out.println("Memory: " + rfAStar.getMemory() +"MB");
+		// 	System.out.println("Memory: " + rfAStar.getMemory() +"MB");
 		 	System.out.println("Total Grids"+rfAStar.getGrids().size());
 		 	
 			System.out.println();
@@ -198,7 +198,7 @@ public class Test {
 			
 			System.out.println();
 			System.out.println("Run time of Repeated Forward A*: " + (timeEndAdaptive - timeStartAdaptive) + "ms");
-		 	System.out.println("Memory: " + adaptiveAStar.getMemory() +"MB");
+		// 	System.out.println("Memory: " + adaptiveAStar.getMemory() +"MB");
 			System.out.println("Total Grids"+grids.size());
 		//	System.out.println("No of Expanded Cells:" + AWithSmallerG.getNumOfExpandedCells());
 		//	System.out.println("No of Nodes in Path:" + AWithSmallerG.getPath().size());
